@@ -7,7 +7,7 @@ if (input == true) {
 
 // now on solar sustem page
 while (true){
-  cin >> input;  
+  cin >> input;  // input here is what the user clicks. Can be reset, mass, position, velocity or go back to the home page.
 
   if (input == "reset"){   // if user clickes the reset buttom
     mass = ; position = ; velocity =   // not sure what default will be so left it empty for now 
@@ -31,11 +31,42 @@ while (true){
     break;
   }
   
-
 }
 
 
+Based on this Pseudocode code from last assigment:
 
 
-  
+UI —> main menu page to access simulation page.
+
+Inputs: “go to simulation page” button.
+Outputs: Go to simulation page.
+
+If { user clicks “go to simulation page”
+   Then take user to simulation page
 }
+
+// on simulation page 
+//Inputs: “reset”, “mass”(for planet), “position”(for planet), “velocity” (for planet)button/options.
+//Outputs: reset options, change planets attributes.
+
+If { user clicks “reset button"
+Reset “mass”, ”position”,  and”velocity” options to default
+}
+
+If { user changes “mass”
+Call function to adjust mass // function written by another team member
+///To add a case where user adds invalid input not using numerical values
+}
+
+If { user changes “position”
+Call function to adjust position // function written by another team member
+///To add a case where user adds invalid input not using numerical values
+}
+
+If { user changes “velocity”
+Call function to adjust velocity // function written by another team member
+///To add a case where user adds invalid input not using numerical values
+}
+
+
