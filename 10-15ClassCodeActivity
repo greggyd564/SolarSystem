@@ -1,0 +1,41 @@
+
+cin >> input; // if clicked or not to go to next page
+
+if (input == true) {
+  return 0;
+}
+
+// now on solar sustem page
+while (true){
+  cin >> input;  
+
+  if (input == "reset"){   // if user clickes the reset buttom
+    mass = ; position = ; velocity =   // not sure what default will be so left it empty for now 
+  }
+
+  else if (input == "mass") {
+    if (inNumeric(val)) adjustMass(stod(val));  // adjustMass is another part of the code by another team member
+    else cout << "only enter a valid number";
+    
+  else if (input == "position") {
+    if (inNumeric(val)) adjustposition(stod(val));  // adjustposition is another part of the code by another team member
+    else cout << "only enter a valid number";
+  }
+  
+  else if (input == "velocity") {
+    if (inNumeric(val)) adjustvelocity(stod(val));  // adjustvelocity is another part of the code by another team member
+    else cout << "only enter a valid number";
+  }
+
+  else if (input == "Homepage") {
+    break;
+  }
+  
+
+}
+
+
+
+
+  
+}
