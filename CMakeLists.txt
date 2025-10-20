@@ -14,7 +14,7 @@ FetchContent_Declare(SFML
 FetchContent_MakeAvailable(SFML)
 message(STATUS "SFML_POPULATED = ${SFML_POPULATED}")
 
-add_executable(main src/main.cpp src/Object.cpp)
+add_executable(main src/main.cpp src/Object.cpp src/cirQueue.cpp)
 target_compile_features(main PRIVATE cxx_std_17)
 #target_link_libraries(main PRIVATE SFML::Graphics)
 target_link_libraries(main PRIVATE SFML::Graphics SFML::Window SFML::System)

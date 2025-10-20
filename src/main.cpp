@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "Object.h"
 #include <vector>
+#include "cirQueue.h"
 
 double computeGForce(double m1, double m2, double r);
 double computeAcceleration(double F, double m);
@@ -8,15 +9,15 @@ double distanceBetweenTwoObjects(double x1, double y1, double x2, double y2);
 std::vector<sf::CircleShape> convertBodies(std::vector<Object> bodies);
 
 
-double G = 1.0; // For testing
+double G = 10.0; // For testing
 double dt = 0.1; // DeltaTime (Change in time)
 
 int main()
 {
     auto window = sf::RenderWindow(sf::VideoMode({800, 600}), "CMake SFML Project");
-    window.setFramerateLimit(100);
+    window.setFramerateLimit(1000);
 
-
+    cirQueue trails = cirQueue(20);
     // First object - Sun
     double sMass = 1.0; // Mass
     double sX = 400.0; // X Coordinate
@@ -25,7 +26,7 @@ int main()
     // Second object - Planet A
     double pMass = 0.000003003; // Mass
     double pVeloX = 0.0; // Velocity X Coord
-    double pVeloY = 1.0; // Velocity y Coord
+    double pVeloY = 0.223; // Velocity y Coord
     double pX = 200.0; // X Coordinate
     double pY = 300.0; // Y Coordinate
 
@@ -36,6 +37,7 @@ int main()
     std::vector<Object> bodies = {sun, earth};
 
     std::vector<sf::CircleShape> graphicsBodies = convertBodies({sun, earth});
+    int drawNum = 0;
 
     while (window.isOpen())
     {
@@ -47,18 +49,29 @@ int main()
             }
         }
 
+        drawNum++;
+        
+
         window.clear();
+        trails.printToScreen(window);
         for (sf::CircleShape body : graphicsBodies) {
             window.draw(body);
         }
+        
         window.display();
+
+        if (drawNum == 1000) {
+            drawNum = 0;
+            graphicsBodies[1].setFillColor(sf::Color::White);
+            trails.push(graphicsBodies[1]);
+        }
 
         double r = distanceBetweenTwoObjects(sun.getLocation().x, sun.getLocation().y, earth.getLocation().x, earth.getLocation().y);
         double force = computeGForce(sun.getMass(), earth.getMass(), r);
         double dx = earth.getLocation().x - sun.getLocation().x;
         double dy = earth.getLocation().y - sun.getLocation().y;
-        double forceVectorX = force * (dx / r);
-        double forceVectorY = force * (dy / r);
+        double forceVectorX = -force * (dx / r);
+        double forceVectorY = -force * (dy / r);
         double accelerationEarthX = computeAcceleration(forceVectorX, earth.getMass());
         double accelerationEarthY = computeAcceleration(forceVectorY, earth.getMass());
         double accelerationSunX = computeAcceleration(-forceVectorX, sun.getMass());
