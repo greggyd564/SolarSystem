@@ -1,0 +1,77 @@
+// teamName_algorithm_v1.cpp
+// Algorithmic approach: Brute force / Direct control-flow mapping
+// Function: processUserChoice()
+// Purpose: Provide a text-based UI menu for controlling a simulation.
+
+#include <iostream>
+#include <string>
+#include <limits>
+
+using std::cin;
+using std::cout;
+using std::endl;
+using std::numeric_limits;
+using std::string;
+using std::streamsize;
+
+// Simulated "send" to a controller (replace with your real call/site)
+void sendCommand(const string& command) {
+    cout << "Sending command: " << command << endl;
+}
+
+// Returns: "START", "PAUSE", "RESET", "QUIT"
+// or error codes: "INPUT_ERROR", "INVALID_INPUT"
+string processUserChoice() {
+    cout << "Menu: 1) Start  2) Pause  3) Reset  4) Quit" << endl;
+    cout << "Enter your choice (1–4): ";
+
+    int userChoice;
+    cin >> userChoice;
+
+    // Handle non-numeric input (e.g., letters)
+    if (cin.fail()) {
+        cout << "Error: Could not read input. Enter numeric values only." << endl;
+        cin.clear(); // clear failbit
+        // discard the rest of the line
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        return "INPUT_ERROR";
+    }
+
+    // Optional: clear trailing characters on the line (e.g., "1abc")
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    string command;
+    switch (userChoice) {
+        case 1: command = "START"; break;
+        case 2: command = "PAUSE"; break;
+        case 3: command = "RESET"; break;
+        case 4: command = "QUIT";  break;
+        default:
+            cout << "Invalid input. Please enter a number from 1 to 4." << endl;
+            return "INVALID_INPUT";
+    }
+
+    // “Send” the command to the controller (stubbed)
+    sendCommand(command);
+    return command;
+}
+
+int main() {
+    while (true) {
+        string cmd = processUserChoice();
+
+        if (cmd == "INPUT_ERROR" || cmd == "INVALID_INPUT") {
+            // Optionally loop again automatically
+            continue;
+        }
+
+        if (cmd == "QUIT") {
+            cout << "Exiting program." << endl;
+            break;
+        }
+
+        // In a real app, you might act on START/PAUSE/RESET here
+        // (we already printed via sendCommand)
+    }
+    return 0;
+}
