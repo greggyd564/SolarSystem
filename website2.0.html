@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Solar System Simulation — UI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --title-size: clamp(2rem, 6vw, 4.2rem);
+      --btn-size: clamp(1rem, 2.5vw, 1.25rem);
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; font-family: system-ui, Arial, sans-serif; }
+
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* HOME */
+    html, body { height: 100%; }
+    #page-home.hero {
+      position: relative;
+      min-height: 100%;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: #fff;
+      background: #0c1324 url("https://upload.wikimedia.org/wikipedia/commons/5/58/Solar-System-blank.jpg")
+        center / cover no-repeat fixed;
+    }
+    #page-home .title {
+      font-weight: 600;
+      font-size: var(--title-size);
+      line-height: 1.15;
+      text-shadow: 0 6px 24px rgba(0,0,0,.45);
+      margin: 0 1rem 2rem;
+    }
+    #go-sim {
+      font-size: var(--btn-size);
+      padding: .9rem 1.25rem;
+      border: 0;
+      border-radius: .35rem;
+      background: rgba(240,240,240,.9);
+      color: #111;
+      box-shadow: 0 6px 18px rgba(0,0,0,.35);
+      cursor: pointer;
+    }
+    #go-sim:active { transform: translateY(1px); }
+    .exit-wrap {
+      position: absolute;
+      left: 1.25rem;
+      bottom: 1rem;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: .5rem;
+      align-items: end;
+      color: #fff;
+      text-shadow: 0 4px 14px rgba(0,0,0,.6);
+      font-size: clamp(.95rem, 2vw, 1.2rem);
+      user-select: none;
+    }
+    .exit-emoji { font-size: clamp(2.2rem, 4vw, 3rem); line-height: 1; }
+    .exit-text { letter-spacing: .02em; }
+
+    /* SIMULATION PAGE */
+    #page-sim {
+      display: flex;
+      height: 100vh;
+      background-color: #0d0d0d;
+      color: #fff;
+    }
+
+    /* Left side: background image area */
+    .sim-display {
+      flex: 2;
+      background: url("https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcR-dFMSOey4QsSWU0pMAgj-PPIWEcYla2e4KD0yYRFXFEJkxP68")
+        center / cover no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-right: 4px solid #444;
+    }
+
+    /* Right side: control panel */
+    .sim-panel {
+      flex: 1;
+      background: #5f5f5f;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      overflow-y: auto;
+    }
+
+    .panel-title {
+      font-weight: 600;
+      font-size: 1.5rem;
+      color: #fff;
+      margin-bottom: 1rem;
+      text-align: left;
+    }
+
+    .control {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 1rem;
+    }
+
+    .control label {
+      font-size: 1.1rem;
+      margin-bottom: .3rem;
+    }
+
+    .control input[type="text"] {
+      padding: .4rem;
+      border: none;
+      border-radius: .25rem;
+      margin-bottom: .3rem;
+    }
+
+    .control input[type="range"] {
+      width: 100%;
+      accent-color: #8c52ff;
+    }
+
+    .btn {
+      padding: .6rem 1rem;
+      border: none;
+      border-radius: .3rem;
+      background: #8c52ff;
+      color: white;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: .5rem;
+      align-self: start;
+    }
+
+    #msg { color: #ffb3b3; font-size: .9rem; }
+
+    .action-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .action-buttons .btn {
+      flex: 1; 
+    }
+
+    #go-home {
+      background: #333;
+    }
+  </style>
+</head>
+<body>
+  <!-- HOME -->
+  <section id="page-home" class="page hero active" aria-label="Main Menu">
+    <div>
+      <h1 class="title">Welcome to the solar system simulation</h1>
+      <a href="https://blue.cs.sonoma.edu/~jbelon/SSSim.html" id="go-sim">Click here to go to simulation</a>
+    </div>
+    <div class="exit-wrap" aria-hidden="true">
+      <div class="exit-emoji">🚪</div>
+      <div class="exit-text">exit</div>
+    </div>
+  </section>
+
+  </script>
+</body>
+</html>
