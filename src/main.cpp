@@ -14,13 +14,22 @@ double dt = 0.1; // DeltaTime (Change in time)
 
 int main()
 {
-    auto window = sf::RenderWindow(sf::VideoMode({800, 600}), "CMake SFML Project");
+    auto window = sf::RenderWindow(sf::VideoMode({1100, 600}), "CMake SFML Project");
+    sf::View worldView = sf::View();
+    worldView.setSize({770, 600});
+    worldView.setCenter({385, 300});
+    //sf::FloatRect world_viewport = sf::FloatRect({ 0, 0 }, { .7f, 1.f });
+    worldView.setViewport(sf::FloatRect({ 0, 0 }, { .7f, 1.f }));
+    sf::View uiView = sf::View();
+    uiView.setSize({330, 600});
+    uiView.setCenter({165, 300});
+
     window.setFramerateLimit(1000);
 
     cirQueue trails = cirQueue(20);
     // First object - Sun
     double sMass = 1.0; // Mass
-    double sX = 400.0; // X Coordinate
+    double sX = 385.0; // X Coordinate
     double sY = 300.0; // Y Coordinate
 
     // Second object - Planet A
@@ -53,10 +62,15 @@ int main()
         
 
         window.clear();
+        window.setView(worldView);
         trails.printToScreen(window);
         for (sf::CircleShape body : graphicsBodies) {
             window.draw(body);
         }
+        window.setView(uiView);
+        //for (sf::CircleShape body : graphicsBodies) {
+        //    window.draw(body);
+        //}
         
         window.display();
 
