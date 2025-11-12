@@ -2,6 +2,7 @@
 #include "Object.h"
 #include <vector>
 #include "cirQueue.h"
+//#include <cassert>
 
 double computeGForce(double m1, double m2, double r);
 double computeAcceleration(double F, double m);
@@ -23,6 +24,14 @@ int main()
     sf::View uiView = sf::View();
     uiView.setSize({330, 600});
     uiView.setCenter({165, 300});
+    uiView.setViewport(sf::FloatRect({.7, 0}, {.3, 1}));
+
+    struct Slider {
+        sf::RectangleShape track;
+        sf::CircleShape    thumb;
+        float min = 0.f, max = 100.f, value = 50.f;
+        float left = 16.f, top = 80.f, width = 288.f;
+    } slider;
 
     window.setFramerateLimit(1000);
 
@@ -67,10 +76,17 @@ int main()
         for (sf::CircleShape body : graphicsBodies) {
             window.draw(body);
         }
+
+        //assert(graphicsBodies[0].getPosition().x == (float)sun.getLocation().x);
+
         window.setView(uiView);
-        //for (sf::CircleShape body : graphicsBodies) {
-        //    window.draw(body);
-        //}
+        // Render UI Here!!!
+        // --- Background panel that fills the UI view ---
+        sf::RectangleShape uiBg;
+        uiBg.setSize({ 330, static_cast<float>(window.getSize().y) });
+        uiBg.setPosition({ 0.f, 0.f }); // in UI-view space, (0,0) is the top-left of the panel
+        uiBg.setFillColor(sf::Color(30, 30, 35)); // dark panel
+        window.draw(uiBg);
         
         window.display();
 
