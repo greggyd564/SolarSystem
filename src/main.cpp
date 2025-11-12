@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "Object.h"
 #include <vector>
+#include <iostream>
 #include "cirQueue.h"
 //#include <cassert>
 
@@ -25,6 +26,12 @@ int main()
     uiView.setSize({330, 600});
     uiView.setCenter({165, 300});
     uiView.setViewport(sf::FloatRect({.7, 0}, {.3, 1}));
+    //std::cout << "Current working directory: "
+    //    << std::filesystem::current_path() << '\n';
+    sf::Font font("../../../../arial.ttf");
+    sf::Text title(font);
+    title.setString("Settings");
+    title.setCharacterSize(24);
 
     struct Slider {
         sf::RectangleShape track;
@@ -87,6 +94,8 @@ int main()
         uiBg.setPosition({ 0.f, 0.f }); // in UI-view space, (0,0) is the top-left of the panel
         uiBg.setFillColor(sf::Color(30, 30, 35)); // dark panel
         window.draw(uiBg);
+        window.draw(title);
+        
         
         window.display();
 
