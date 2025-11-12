@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Window/Event.hpp>
 #include "Object.h"
 #include <vector>
 #include <iostream>
@@ -32,6 +33,8 @@ int main()
     sf::Text title(font);
     title.setString("Settings");
     title.setCharacterSize(24);
+    title.setOrigin({title.getLocalBounds().size.x/2,title.getLocalBounds().size.y/2});
+    title.setPosition({165, 20});
 
     struct Slider {
         sf::RectangleShape track;
@@ -39,6 +42,24 @@ int main()
         float min = 0.f, max = 100.f, value = 50.f;
         float left = 16.f, top = 80.f, width = 288.f;
     } slider;
+
+    slider.track.setSize({ slider.width, 6.f });
+    slider.track.setPosition({ slider.left, slider.top });
+    slider.track.setFillColor(sf::Color(80, 80, 90));
+
+    slider.thumb.setRadius(10.f);
+    slider.thumb.setOrigin({ 10.f, 10.f }); // center origin
+    slider.thumb.setFillColor(sf::Color(200, 200, 220));
+
+    auto updateThumb = [&] {
+        float t = (slider.value - slider.min) / (slider.max - slider.min);
+        float x = slider.left + t * slider.width;
+        slider.thumb.setPosition({ x, slider.top + 3.f });
+    };
+    updateThumb();
+
+    bool draggingSlider = false;
+    bool inputFocused = false;
 
     window.setFramerateLimit(1000);
 
@@ -66,11 +87,35 @@ int main()
 
     while (window.isOpen())
     {
+        //sf::Event e;
         while (const std::optional event = window.pollEvent())
         {
             if (event->is<sf::Event::Closed>())
             {
                 window.close();
+            }
+
+            if (event->is<sf::Event::MouseButtonPressed>() ) { //&& e.mouseButton.button == sf::Mouse::Left) {
+                // Slider hit
+                sf::FloatRect trackBounds(slider.track.getPosition(), slider.track.getSize());
+                //trackBounds.top -= 10.f; trackBounds.height += 20.f; // easier to catch
+                //if (trackBounds.contains(uiPos)) {
+                    draggingSlider = true;
+                //}
+
+                // Input focus
+                //inputFocused = inputRect.getGlobalBounds().contains(uiPos);
+                //inputRect.setOutlineColor(inputFocused ? sf::Color(180, 180, 220)
+                //    : sf::Color(100, 100, 120));
+            }
+            if (event->is<sf::Event::MouseButtonReleased>()) { //&& e.mouseButton.button == sf::Mouse::Left) {
+                draggingSlider = false;
+            }
+            if (event->is<sf::Event::MouseMoved>() && draggingSlider) {
+                float t = slider.left / slider.width;
+                //float t = std::clamp((uiPos.x - slider.left) / slider.width, 0.f, 1.f);
+                slider.value = slider.min + t * (slider.max - slider.min);
+                updateThumb();
             }
         }
 
@@ -95,6 +140,8 @@ int main()
         uiBg.setFillColor(sf::Color(30, 30, 35)); // dark panel
         window.draw(uiBg);
         window.draw(title);
+        window.draw(slider.track);
+        window.draw(slider.thumb);
         
         
         window.display();
