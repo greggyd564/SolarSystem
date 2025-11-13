@@ -29,7 +29,7 @@ int main()
     uiView.setViewport(sf::FloatRect({.7, 0}, {.3, 1}));
     //std::cout << "Current working directory: "
     //    << std::filesystem::current_path() << '\n';
-    sf::Font font("../../../../arial.ttf");
+    sf::Font font(std::string(PROJECT_ROOT) + "/arial.ttf");
     sf::Text title(font);
     title.setString("Settings");
     title.setCharacterSize(24);
