@@ -3,6 +3,7 @@
 #include "Object.h"
 #include <vector>
 #include <iostream>
+#include <algorithm>
 #include "cirQueue.h"
 //#include <cassert>
 
@@ -112,9 +113,13 @@ int main()
                 draggingSlider = false;
             }
             if (event->is<sf::Event::MouseMoved>() && draggingSlider) {
-                float t = slider.left / slider.width;
-                //float t = std::clamp((uiPos.x - slider.left) / slider.width, 0.f, 1.f);
+                //std::cout << "Mouse x: " << sf::Mouse::getPosition().x << std::endl;
+                //std::cout << "Slider.left: " << slider.left << std::endl;
+                //std::cout << "Mouse x to Coords: " << window.mapPixelToCoords(sf::Mouse::getPosition(window)).x << std::endl;
+                float t = std::clamp((window.mapPixelToCoords(sf::Mouse::getPosition(window)).x - slider.left)/slider.width, 0.f, 1.f);
                 slider.value = slider.min + t * (slider.max - slider.min);
+                //std::cout << "t: " << t << std::endl;
+                //std::cout << "Slider Value: " << slider.value << std::endl;
                 updateThumb();
             }
         }
