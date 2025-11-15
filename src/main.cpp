@@ -32,10 +32,22 @@ int main()
     //    << std::filesystem::current_path() << '\n';
     sf::Font font(std::string(PROJECT_ROOT) + "/arial.ttf");
     sf::Text title(font);
-    title.setString("Settings");
+    title.setString("Properties");
     title.setCharacterSize(24);
     title.setOrigin({title.getLocalBounds().size.x/2,title.getLocalBounds().size.y/2});
     title.setPosition({165, 20});
+
+    sf::Text massLabel(font);
+    massLabel.setString("Mass: 50kg");
+    massLabel.setCharacterSize(24);
+    massLabel.setOrigin({ massLabel.getLocalBounds().size.x / 2,massLabel.getLocalBounds().size.y / 2 });
+    massLabel.setPosition({ 140, 60 });
+
+    sf::Text posLabel(font);
+    posLabel.setString("Distance from Sun: 50AU");
+    posLabel.setCharacterSize(24);
+    posLabel.setOrigin({ posLabel.getLocalBounds().size.x / 2,posLabel.getLocalBounds().size.y / 2 });
+    posLabel.setPosition({ 140, 150 });
 
     struct Slider {
         sf::RectangleShape track;
@@ -49,6 +61,7 @@ int main()
     Slider& posSlider = sliders[1];
 
     massSlider.track.setSize({ massSlider.width, 6.f });
+    massSlider.top = 100;
     massSlider.track.setPosition({ massSlider.left, massSlider.top });
     massSlider.track.setFillColor(sf::Color(80, 80, 90));
 
@@ -166,6 +179,8 @@ int main()
         uiBg.setFillColor(sf::Color(30, 30, 35)); // dark panel
         window.draw(uiBg);
         window.draw(title);
+        window.draw(massLabel);
+        window.draw(posLabel);
         for (Slider i : sliders) {
             window.draw(i.track);
             window.draw(i.thumb);
@@ -212,7 +227,7 @@ double distanceBetweenTwoObjects(double x1, double y1, double x2, double y2) {
     return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
 }
 
-// Greg's algorithm for implementation assignment
+// Makes vector of planet's graphics bodies
 std::vector<sf::CircleShape> convertBodies(std::vector<Object> bodies) {
     std::vector<sf::CircleShape> graphicsBodies = {};
     for (Object body : bodies) {
