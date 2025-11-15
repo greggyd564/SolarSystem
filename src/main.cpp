@@ -156,6 +156,7 @@ int main()
     std::vector<Object> nextBodies = bodies;
 
     // should this be changed to bodies inside {} ? idk i tried and nothing was different lmk
+    // Probably should be (bodies), but it doesn't matter because of frame rate
     std::vector<sf::CircleShape> graphicsBodies = convertBodies({sun, earth});
     int drawNum = 0;
 
@@ -223,6 +224,7 @@ int main()
             drawNum = 0;
             for (int l = 0; l < bodies.size(); l++) {
                 graphicsBodies[l].setFillColor(sf::Color::White);
+                graphicsBodies[l].setRadius(5);
                 trails.push(graphicsBodies[l]);
             }
         }
