@@ -1,0 +1,2 @@
+# Lines starting with # are comments.
+# Add FULL PATHS of files or directories to ignore, one per line.
