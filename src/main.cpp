@@ -131,29 +131,22 @@ int main()
             }
 
             if (event->is<sf::Event::MouseButtonPressed>() ) { //&& e.mouseButton.button == sf::Mouse::Left) {
-                // Slider hit
-                sf::FloatRect trackBounds(sliders[sliderBeingDragged].track.getPosition(), sliders[sliderBeingDragged].track.getSize());
-                //trackBounds.top -= 10.f; trackBounds.height += 20.f; // easier to catch
-                //if (trackBounds.contains(uiPos)) {
-                    draggingSlider = true;
-                //}
-
-                // Input focus
-                //inputFocused = inputRect.getGlobalBounds().contains(uiPos);
-                //inputRect.setOutlineColor(inputFocused ? sf::Color(180, 180, 220)
-                //    : sf::Color(100, 100, 120));
+                // Check if we are clicking on a slider and setting dragginsSlider and sliderBeingDragged accordingly
+                sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+                for (int i = 0; i < std::size(sliders); i++) {
+                    if (sliders[i].thumb.getGlobalBounds().contains(mousePos)) {
+                        sliderBeingDragged = i;
+                        draggingSlider = true;
+                        break;
+                    }
+                }
             }
             if (event->is<sf::Event::MouseButtonReleased>()) { //&& e.mouseButton.button == sf::Mouse::Left) {
                 draggingSlider = false;
             }
             if (event->is<sf::Event::MouseMoved>() && draggingSlider) {
-                //std::cout << "Mouse x: " << sf::Mouse::getPosition().x << std::endl;
-                //std::cout << "Slider.left: " << slider.left << std::endl;
-                //std::cout << "Mouse x to Coords: " << window.mapPixelToCoords(sf::Mouse::getPosition(window)).x << std::endl;
                 float t = std::clamp((window.mapPixelToCoords(sf::Mouse::getPosition(window)).x - sliders[sliderBeingDragged].left)/sliders[sliderBeingDragged].width, 0.f, 1.f);
                 sliders[sliderBeingDragged].value = sliders[sliderBeingDragged].min + t * (sliders[sliderBeingDragged].max - sliders[sliderBeingDragged].min);
-                //std::cout << "t: " << t << std::endl;
-                //std::cout << "Slider Value: " << slider.value << std::endl;
                 updateThumb();
             }
         }
