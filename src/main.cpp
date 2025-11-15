@@ -1,9 +1,11 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Window/Event.hpp>
 #include "Object.h"
 #include <vector>
-#include "cirQueue.h"
 #include <iostream>
-
+#include <algorithm>
+#include "cirQueue.h"
+//#include <cassert>
 using namespace std;
 
 double computeGForce(double m1, double m2, double r);
@@ -17,8 +19,80 @@ std::vector<sf::CircleShape> convertBodies(std::vector<Object> bodies);
 double G = 10; // For testing
 double dt = 0.25; // DeltaTime (Change in time) -- increase to make sim go faster , but too much causes it to break (math stuff)
 
-int main() {
-    auto window = sf::RenderWindow(sf::VideoMode({800, 600}), "CMake SFML Project");
+int main()
+{
+    auto window = sf::RenderWindow(sf::VideoMode({1100, 600}), "CMake SFML Project");
+    sf::View worldView = sf::View();
+    worldView.setSize({770, 600});
+    worldView.setCenter({385, 300});
+    worldView.setViewport(sf::FloatRect({ 0, 0 }, { .7f, 1.f }));
+    sf::View uiView = sf::View();
+    uiView.setSize({330, 600});
+    uiView.setCenter({165, 300});
+    uiView.setViewport(sf::FloatRect({.7, 0}, {.3, 1}));
+    sf::Font font(std::string(PROJECT_ROOT) + "/arial.ttf");
+    sf::Text title(font);
+    title.setString("Planet Properties");
+    title.setCharacterSize(24);
+    title.setOrigin({title.getLocalBounds().size.x/2,title.getLocalBounds().size.y/2});
+    title.setPosition({165, 20});
+
+    sf::Text massLabel(font);
+    massLabel.setString("Mass: 50kg");
+    massLabel.setCharacterSize(24);
+    massLabel.setOrigin({ massLabel.getLocalBounds().size.x / 2,massLabel.getLocalBounds().size.y / 2 });
+    massLabel.setPosition({ 140, 60 });
+
+    sf::Text posLabel(font);
+    posLabel.setString("Distance from Sun: 50AU");
+    posLabel.setCharacterSize(24);
+    posLabel.setOrigin({ posLabel.getLocalBounds().size.x / 2,posLabel.getLocalBounds().size.y / 2 });
+    posLabel.setPosition({ 140, 150 });
+
+    struct Slider {
+        sf::RectangleShape track;
+        sf::CircleShape    thumb;
+        float min = 0.f, max = 100.f, value = 50.f;
+        float left = 16.f, top = 80.f, width = 288.f;
+    };
+
+    Slider sliders[2];
+    Slider& massSlider = sliders[0];
+    Slider& posSlider = sliders[1];
+
+    massSlider.track.setSize({ massSlider.width, 6.f });
+    massSlider.top = 100;
+    massSlider.track.setPosition({ massSlider.left, massSlider.top });
+    massSlider.track.setFillColor(sf::Color(80, 80, 90));
+
+    massSlider.thumb.setRadius(10.f);
+    massSlider.thumb.setOrigin({ 10.f, 10.f });
+    massSlider.thumb.setFillColor(sf::Color(200, 200, 220));
+
+    posSlider.track.setSize({posSlider.width, 6.f});
+    posSlider.top = 180;
+    posSlider.track.setPosition({ posSlider.left, posSlider.top });
+    posSlider.track.setFillColor(sf::Color(80, 80, 90));
+
+    posSlider.thumb.setRadius(10.f);
+    posSlider.thumb.setOrigin({ 10.f, 10.f });
+    posSlider.thumb.setFillColor(sf::Color(200, 200, 220));
+
+    int sliderBeingDragged = 0;
+
+    auto updateThumb = [&] {
+        float t = (sliders[sliderBeingDragged].value - sliders[sliderBeingDragged].min) / (sliders[sliderBeingDragged].max - sliders[sliderBeingDragged].min);
+        float x = sliders[sliderBeingDragged].left + t * sliders[sliderBeingDragged].width;
+        sliders[sliderBeingDragged].thumb.setPosition({x, sliders[sliderBeingDragged].top + 3.f});
+    };
+
+    for (int i = 0; i < std::size(sliders); i++) {
+        sliderBeingDragged = i;
+        updateThumb();
+    }
+
+    bool draggingSlider = false;
+
     window.setFramerateLimit(1000);
 
     // changed to 1000 from 20 idk why looks cool
@@ -26,7 +100,7 @@ int main() {
 
     // First object - Sun
     double sMass = 1.0; // Mass
-    double sX = 400.0; // X Coordinate
+    double sX = 385.0; // X Coordinate
     double sY = 300.0; // Y Coordinate
 
     // Second object - Planet A
@@ -80,11 +154,31 @@ int main() {
 
     while (window.isOpen())
     {
+        //sf::Event e;
         while (const std::optional event = window.pollEvent())
         {
             if (event->is<sf::Event::Closed>())
             {
                 window.close();
+            }
+
+            if (event->is<sf::Event::MouseButtonPressed>() ) { 
+                sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+                for (int i = 0; i < std::size(sliders); i++) {
+                    if (sliders[i].thumb.getGlobalBounds().contains(mousePos)) {
+                        sliderBeingDragged = i;
+                        draggingSlider = true;
+                        break;
+                    }
+                }
+            }
+            if (event->is<sf::Event::MouseButtonReleased>()) { 
+                draggingSlider = false;
+            }
+            if (event->is<sf::Event::MouseMoved>() && draggingSlider) {
+                float t = std::clamp((window.mapPixelToCoords(sf::Mouse::getPosition(window)).x - sliders[sliderBeingDragged].left)/sliders[sliderBeingDragged].width, 0.f, 1.f);
+                sliders[sliderBeingDragged].value = sliders[sliderBeingDragged].min + t * (sliders[sliderBeingDragged].max - sliders[sliderBeingDragged].min);
+                updateThumb();
             }
         }
 
@@ -92,9 +186,27 @@ int main() {
         
 
         window.clear();
+        window.setView(worldView);
         trails.printToScreen(window);
         for (sf::CircleShape body : graphicsBodies) {
             window.draw(body);
+        }
+
+        //assert(graphicsBodies[0].getPosition().x == (float)sun.getLocation().x);
+
+        window.setView(uiView);
+        // Render UI Here!!!
+        sf::RectangleShape uiBg;
+        uiBg.setSize({ 330, static_cast<float>(window.getSize().y) });
+        uiBg.setPosition({ 0.f, 0.f }); 
+        uiBg.setFillColor(sf::Color(30, 30, 35));
+        window.draw(uiBg);
+        window.draw(title);
+        window.draw(massLabel);
+        window.draw(posLabel);
+        for (Slider i : sliders) {
+            window.draw(i.track);
+            window.draw(i.thumb);
         }
         
         window.display();
@@ -188,7 +300,7 @@ sf::Vector2f computeForce(Object objectOne, Object objectTwo) {
 }
 
 
-// Greg's algorithm for implementation assignment
+// Makes vector of planet graphics objects
 std::vector<sf::CircleShape> convertBodies(std::vector<Object> bodies) {
     std::vector<sf::CircleShape> graphicsBodies = {};
     for (Object body : bodies) {
