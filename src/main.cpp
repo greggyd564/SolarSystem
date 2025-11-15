@@ -61,6 +61,9 @@ int main()
     Slider& massSlider = sliders[0];
     Slider& posSlider = sliders[1];
 
+    massSlider.min = 0.000001;
+    massSlider.max = 0.000100;
+    massSlider.value = 0.000003003;
     massSlider.track.setSize({ massSlider.width, 6.f });
     massSlider.top = 100;
     massSlider.track.setPosition({ massSlider.left, massSlider.top });
@@ -86,7 +89,7 @@ int main()
         float x = sliders[sliderBeingDragged].left + t * sliders[sliderBeingDragged].width;
         sliders[sliderBeingDragged].thumb.setPosition({x, sliders[sliderBeingDragged].top + 3.f});
         if (sliderBeingDragged == 0) {
-            massLabel.setString("Mass: " + std::to_string(static_cast<int>(sliders[sliderBeingDragged].value)) + " kg");
+            massLabel.setString("Mass: " + to_string(sliders[sliderBeingDragged].value * 100000) + " kg");
         }
         else if (sliderBeingDragged == 1) {
             posLabel.setString("Distance From Sun: " + std::to_string(static_cast<int>(sliders[sliderBeingDragged].value)) + " AU");
@@ -159,6 +162,7 @@ int main()
     // Probably should be (bodies), but it doesn't matter because of frame rate
     std::vector<sf::CircleShape> graphicsBodies = convertBodies({sun, earth});
     int drawNum = 0;
+    int targetedPlanetIdx = 1;
 
     while (window.isOpen())
     {
@@ -182,6 +186,7 @@ int main()
             }
             if (event->is<sf::Event::MouseButtonReleased>()) { 
                 draggingSlider = false;
+                bodies[targetedPlanetIdx].setMass(sliders[sliderBeingDragged].value);
             }
             if (event->is<sf::Event::MouseMoved>() && draggingSlider) {
                 float t = std::clamp((window.mapPixelToCoords(sf::Mouse::getPosition(window)).x - sliders[sliderBeingDragged].left)/sliders[sliderBeingDragged].width, 0.f, 1.f);
@@ -196,8 +201,13 @@ int main()
         window.clear();
         window.setView(worldView);
         trails.printToScreen(window);
+        int draw_loop_idx = 0;
         for (sf::CircleShape body : graphicsBodies) {
+            if (draw_loop_idx == targetedPlanetIdx) {
+                body.setFillColor(sf::Color::Blue);
+            }
             window.draw(body);
+            draw_loop_idx++;
         }
 
         //assert(graphicsBodies[0].getPosition().x == (float)sun.getLocation().x);
