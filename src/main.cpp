@@ -22,17 +22,14 @@ int main()
     sf::View worldView = sf::View();
     worldView.setSize({770, 600});
     worldView.setCenter({385, 300});
-    //sf::FloatRect world_viewport = sf::FloatRect({ 0, 0 }, { .7f, 1.f });
     worldView.setViewport(sf::FloatRect({ 0, 0 }, { .7f, 1.f }));
     sf::View uiView = sf::View();
     uiView.setSize({330, 600});
     uiView.setCenter({165, 300});
     uiView.setViewport(sf::FloatRect({.7, 0}, {.3, 1}));
-    //std::cout << "Current working directory: "
-    //    << std::filesystem::current_path() << '\n';
     sf::Font font(std::string(PROJECT_ROOT) + "/arial.ttf");
     sf::Text title(font);
-    title.setString("Properties");
+    title.setString("Planet Properties");
     title.setCharacterSize(24);
     title.setOrigin({title.getLocalBounds().size.x/2,title.getLocalBounds().size.y/2});
     title.setPosition({165, 20});
@@ -66,7 +63,7 @@ int main()
     massSlider.track.setFillColor(sf::Color(80, 80, 90));
 
     massSlider.thumb.setRadius(10.f);
-    massSlider.thumb.setOrigin({ 10.f, 10.f }); // center origin
+    massSlider.thumb.setOrigin({ 10.f, 10.f });
     massSlider.thumb.setFillColor(sf::Color(200, 200, 220));
 
     posSlider.track.setSize({posSlider.width, 6.f});
@@ -75,16 +72,14 @@ int main()
     posSlider.track.setFillColor(sf::Color(80, 80, 90));
 
     posSlider.thumb.setRadius(10.f);
-    posSlider.thumb.setOrigin({ 10.f, 10.f }); // center origin
+    posSlider.thumb.setOrigin({ 10.f, 10.f });
     posSlider.thumb.setFillColor(sf::Color(200, 200, 220));
 
     int sliderBeingDragged = 0;
 
     auto updateThumb = [&] {
-        std::cout << "trying to update thumb: " << sliderBeingDragged << std::endl;
         float t = (sliders[sliderBeingDragged].value - sliders[sliderBeingDragged].min) / (sliders[sliderBeingDragged].max - sliders[sliderBeingDragged].min);
         float x = sliders[sliderBeingDragged].left + t * sliders[sliderBeingDragged].width;
-        std::cout << "Moving to position: " << x << ", " << sliders[sliderBeingDragged].top + 3.f << std::endl;
         sliders[sliderBeingDragged].thumb.setPosition({x, sliders[sliderBeingDragged].top + 3.f});
     };
 
@@ -94,7 +89,6 @@ int main()
     }
 
     bool draggingSlider = false;
-    bool inputFocused = false;
 
     window.setFramerateLimit(1000);
 
@@ -130,8 +124,7 @@ int main()
                 window.close();
             }
 
-            if (event->is<sf::Event::MouseButtonPressed>() ) { //&& e.mouseButton.button == sf::Mouse::Left) {
-                // Check if we are clicking on a slider and setting dragginsSlider and sliderBeingDragged accordingly
+            if (event->is<sf::Event::MouseButtonPressed>() ) { 
                 sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
                 for (int i = 0; i < std::size(sliders); i++) {
                     if (sliders[i].thumb.getGlobalBounds().contains(mousePos)) {
@@ -141,7 +134,7 @@ int main()
                     }
                 }
             }
-            if (event->is<sf::Event::MouseButtonReleased>()) { //&& e.mouseButton.button == sf::Mouse::Left) {
+            if (event->is<sf::Event::MouseButtonReleased>()) { 
                 draggingSlider = false;
             }
             if (event->is<sf::Event::MouseMoved>() && draggingSlider) {
@@ -165,11 +158,10 @@ int main()
 
         window.setView(uiView);
         // Render UI Here!!!
-        // --- Background panel that fills the UI view ---
         sf::RectangleShape uiBg;
         uiBg.setSize({ 330, static_cast<float>(window.getSize().y) });
-        uiBg.setPosition({ 0.f, 0.f }); // in UI-view space, (0,0) is the top-left of the panel
-        uiBg.setFillColor(sf::Color(30, 30, 35)); // dark panel
+        uiBg.setPosition({ 0.f, 0.f }); 
+        uiBg.setFillColor(sf::Color(30, 30, 35));
         window.draw(uiBg);
         window.draw(title);
         window.draw(massLabel);
