@@ -1,0 +1,948 @@
+Directory structure map for: /Users/stone/Documents/GitHub/SolarSystem
+Generated on: 2025-11-05 23:43:02
+
+Ignoring paths listed in 'ignore_list.txt':
+- None
+
+===========================================================================
+
+--- Structure Overview ---
+
+.gitattributes
+.gitignore
+10-15ClassCodeActivity
+10-15ClassCodeActivityJulian
+CMakeLists.txt
+LICENSE.md
+README.md
+ignore_list.txt
+src/
+    Object.cpp
+    Object.h
+    cirQueue.cpp
+    cirQueue.h
+    main.cpp
+website.html
+
+===========================================================================
+
+--- Detailed Map with Contents (--all specified) ---
+
+.gitattributes
+
+    ---- START OF: .gitattributes ----
+    # Auto detect text files and perform LF normalization
+    * text=auto
+    ---- END OF: .gitattributes ----
+
+.gitignore
+
+    ---- START OF: .gitignore ----
+    build
+    out
+    .cache
+    .idea
+    .vs
+    .vscode
+    cmake-build-debug
+    ---- END OF: .gitignore ----
+
+10-15ClassCodeActivity
+
+    ---- START OF: 10-15ClassCodeActivity ----
+    
+    cin >> input; // if clicked or not to go to next page
+    
+    if (input == true) {
+      return 0;
+    }
+    
+    // now on solar sustem page
+    while (true){
+      cin >> input;  // input here is what the user clicks. Can be reset, mass, position, velocity or go back to the home page.
+    
+      if (input == "reset"){   // if user clickes the reset buttom
+        mass = ; position = ; velocity =   // not sure what default will be so left it empty for now 
+      }
+    
+      else if (input == "mass") {
+        if (inNumeric(val)) adjustMass(stod(val));  // adjustMass is another part of the code by another team member
+        else cout << "only enter a valid number";
+    
+      else if (input == "position") {
+        if (inNumeric(val)) adjustposition(stod(val));  // adjustposition is another part of the code by another team member
+        else cout << "only enter a valid number";
+      }
+    
+      else if (input == "velocity") {
+        if (inNumeric(val)) adjustvelocity(stod(val));  // adjustvelocity is another part of the code by another team member
+        else cout << "only enter a valid number";
+      }
+    
+      else if (input == "Homepage") {
+        break;
+      }
+    
+    }
+    
+    
+    Based on this Pseudocode code from last assigment:
+    
+    
+    UI —> main menu page to access simulation page.
+    
+    Inputs: “go to simulation page” button.
+    Outputs: Go to simulation page.
+    
+    If { user clicks “go to simulation page”
+       Then take user to simulation page
+    }
+    
+    // on simulation page 
+    //Inputs: “reset”, “mass”(for planet), “position”(for planet), “velocity” (for planet)button/options.
+    //Outputs: reset options, change planets attributes.
+    
+    If { user clicks “reset button"
+    Reset “mass”, ”position”,  and”velocity” options to default
+    }
+    
+    If { user changes “mass”
+    Call function to adjust mass // function written by another team member
+    ///To add a case where user adds invalid input not using numerical values
+    }
+    
+    If { user changes “position”
+    Call function to adjust position // function written by another team member
+    ///To add a case where user adds invalid input not using numerical values
+    }
+    
+    If { user changes “velocity”
+    Call function to adjust velocity // function written by another team member
+    ///To add a case where user adds invalid input not using numerical values
+    }
+    
+    
+    ---- END OF: 10-15ClassCodeActivity ----
+
+10-15ClassCodeActivityJulian
+
+    ---- START OF: 10-15ClassCodeActivityJulian ----
+    // teamName_algorithm_v1.cpp
+    // Algorithmic approach: Brute force / Direct control-flow mapping
+    // Function: processUserChoice()
+    // Purpose: Provide a text-based UI menu for controlling a simulation.
+    
+    #include <iostream>
+    #include <string>
+    #include <limits>
+    
+    using std::cin;
+    using std::cout;
+    using std::endl;
+    using std::numeric_limits;
+    using std::string;
+    using std::streamsize;
+    
+    // Simulated "send" to a controller (replace with your real call/site)
+    void sendCommand(const string& command) {
+        cout << "Sending command: " << command << endl;
+    }
+    
+    // Returns: "START", "PAUSE", "RESET", "QUIT"
+    // or error codes: "INPUT_ERROR", "INVALID_INPUT"
+    string processUserChoice() {
+        cout << "Menu: 1) Start  2) Pause  3) Reset  4) Quit" << endl;
+        cout << "Enter your choice (1–4): ";
+    
+        int userChoice;
+        cin >> userChoice;
+    
+        // Handle non-numeric input (e.g., letters)
+        if (cin.fail()) {
+            cout << "Error: Could not read input. Enter numeric values only." << endl;
+            cin.clear(); // clear failbit
+            // discard the rest of the line
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            return "INPUT_ERROR";
+        }
+    
+        // Optional: clear trailing characters on the line (e.g., "1abc")
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    
+        string command;
+        switch (userChoice) {
+            case 1: command = "START"; break;
+            case 2: command = "PAUSE"; break;
+            case 3: command = "RESET"; break;
+            case 4: command = "QUIT";  break;
+            default:
+                cout << "Invalid input. Please enter a number from 1 to 4." << endl;
+                return "INVALID_INPUT";
+        }
+    
+        // “Send” the command to the controller (stubbed)
+        sendCommand(command);
+        return command;
+    }
+    
+    int main() {
+        while (true) {
+            string cmd = processUserChoice();
+    
+            if (cmd == "INPUT_ERROR" || cmd == "INVALID_INPUT") {
+                // Optionally loop again automatically
+                continue;
+            }
+    
+            if (cmd == "QUIT") {
+                cout << "Exiting program." << endl;
+                break;
+            }
+    
+            // In a real app, you might act on START/PAUSE/RESET here
+            // (we already printed via sendCommand)
+        }
+        return 0;
+    }
+    ---- END OF: 10-15ClassCodeActivityJulian ----
+
+CMakeLists.txt
+
+    ---- START OF: CMakeLists.txt ----
+    set(FETCHCONTENT_QUIET OFF)
+    cmake_minimum_required(VERSION 3.25)
+    project(CMakeSFMLProject LANGUAGES CXX)
+    
+    
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+    
+    include(FetchContent)
+    FetchContent_Declare(SFML
+        GIT_REPOSITORY https://github.com/SFML/SFML.git
+        GIT_TAG 3.0.2
+        GIT_SHALLOW ON
+        )
+    FetchContent_MakeAvailable(SFML)
+    message(STATUS "SFML_POPULATED = ${SFML_POPULATED}")
+    
+    add_executable(main src/main.cpp src/Object.cpp src/cirQueue.cpp)
+    target_compile_features(main PRIVATE cxx_std_17)
+    #target_link_libraries(main PRIVATE SFML::Graphics)
+    target_link_libraries(main PRIVATE SFML::Graphics SFML::Window SFML::System)
+    ---- END OF: CMakeLists.txt ----
+
+LICENSE.md
+
+    ---- START OF: LICENSE.md ----
+    # CMake SFML Project Licenses
+    
+    *This software is available under 2 licenses -- choose whichever you prefer.*
+    
+    ## Public Domain
+    
+    This is free and unencumbered software released into the public domain.
+    
+    Anyone is free to copy, modify, publish, use, compile, sell, or
+    distribute this software, either in source code form or as a compiled
+    binary, for any purpose, commercial or non-commercial, and by any
+    means.
+    
+    In jurisdictions that recognize copyright laws, the author or authors
+    of this software dedicate any and all copyright interest in the
+    software to the public domain. We make this dedication for the benefit
+    of the public at large and to the detriment of our heirs and
+    successors. We intend this dedication to be an overt act of
+    relinquishment in perpetuity of all present and future rights to this
+    software under copyright law.
+    
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+    IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+    OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+    ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+    OTHER DEALINGS IN THE SOFTWARE.
+    
+    ## MIT License
+    
+    Copyright (c) 2022 Lukas Drrenberger
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+    
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+    
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+    ---- END OF: LICENSE.md ----
+
+README.md
+
+    ---- START OF: README.md ----
+    // The goal of this simulation is to visually represent the orbit of a planet around the sun.
+    
+    /** Current Formulas:
+    // Something to note is that in our simulation we use most of these equations twice to get a vector. This is because our
+    // Simulation is in 2D therefore we need a change in X & Y.
+    // VELOCITY: dx / dt = v "the rate of change of position with respect to time is velocity."
+    // GRAVITATIONAL FORCE: F = G ( ( m1 * m2 ) / r^2 ) cc: https://en.wikipedia.org/wiki/Newton's_law_of_universal_gravitation
+    // ACCELERATION: a = F / m "force divided by mass"
+    // NEWTON'S SECOND LAW: F = m * a
+    // DISTANCE BETWEEN TWO POINTS p = sqrt( ( (x2 - x1)^2 + (y2 - y1)^2 ) "length of the vector"**/
+    
+    /** How It Works:
+    // Gather Initial parameters of two objects (Mass, Velocity, and Position)
+    // Use the Distance Between Two Points Formula to calculate the distance (r)
+    // Use the Masses of both objects & r to compute the Force Magnitude ( Then split into direction , ie a vector )
+    // Use that vector to calculate the acceleration of each Object ( inverse but equal due to N3L )
+    // Use that acceleration to update the velocity of both objects
+    // Use the velocity to update the position
+    // Uses Delta-t as time which essentially is multiplied by to represent the change over time.
+    // Then the visualization changes by basically plotting that change in position on a graph**/
+    
+    /** NEXT STEPS:
+    // - Figure out parameters that don't slingshot planets into space
+    // - Create a 2D Motion Visualization ( CURRENTLY IN PROGRESS )
+    // - Figure out N-Body System
+    // - Make it 3D
+    // - Make it look good
+    // - Website / App integration
+    // - Allow adjusting parameters / adding planets from the site ( UX / UI )
+    // - Adding things other than planets ( ie multiple suns, black holes, asteroid belts )
+    // - Showing collisions ( Would be cool )  **/
+    ---- END OF: README.md ----
+
+ignore_list.txt
+
+    ---- START OF: ignore_list.txt ----
+    # Lines starting with # are comments.
+    # Add FULL PATHS of files or directories to ignore, one per line.
+    ---- END OF: ignore_list.txt ----
+
+src/
+    Object.cpp
+
+        ---- START OF: Object.cpp ----
+        #include "Object.h"
+        
+        // constructor
+        Object::Object(double mass, int type, double veloX, double veloY, double x, double y) {
+            this->mass = mass;
+            this->type = type;
+            velocity = { veloX, veloY };
+            location = { x, y };
+        }
+        
+        // Getter for location
+        pos Object::getLocation() {
+            return location;
+        }
+        
+        // Getter for mass
+        double Object::getMass() {
+            return mass;
+        }
+        
+        //Getter for velocity
+        pos Object::getVelocity() {
+            return velocity;
+        }
+        
+        // Getter for type
+        int Object::getType() {
+            return type;
+        }
+        
+        // Setter for location
+        void Object::setLocation(pos newLocation) {
+            location = newLocation;
+        }
+        
+        // Setter for mass
+        void Object::setMass(double newMass) {
+            mass = newMass;
+        }
+        
+        // Setter for Velocity
+        void Object::setVelocity(pos newVelo) {
+            velocity = newVelo;
+        }
+        
+        // Updates the Velocity
+        void Object::velocityUpdate(double accelerationX, double accelerationY, double deltaT) {
+            velocity.x += accelerationX * deltaT;
+            velocity.y += accelerationY * deltaT;
+        }
+        
+        void Object::updatePosition(double deltaT) {
+            location.x += velocity.x * deltaT;
+            location.y += velocity.y * deltaT;
+        }
+        
+        ---- END OF: Object.cpp ----
+
+    Object.h
+
+        ---- START OF: Object.h ----
+        #ifndef OBJECT_H
+        #define OBJECT_H
+        struct pos { // X/Y Coordinates for Position & Velocity
+            double x, y;
+        };
+        
+        
+        class Object {
+        public:
+            // Constructor
+            Object(double mass, int type, double veloX, double veloY, double x, double y);
+        
+            // Getters
+            double getMass();
+            pos getVelocity(); 
+            pos getLocation();
+            int getType();
+        
+            // Setters
+            void setMass(double newMass);
+            void setVelocity(pos newVelo);
+            void setLocation(pos newLocation);
+        
+            // Updates velocity
+            void velocityUpdate(double accelerationX, double accelerationY, double deltaT);
+            // updates Position
+            void updatePosition(double deltaT);
+        
+        
+        private:
+            double mass;
+            pos location;
+            pos velocity;
+            int type; // 0 is sun, 1 is planet
+        
+        };
+        
+        
+        
+        #endif //OBJECT_H
+        ---- END OF: Object.h ----
+
+    cirQueue.cpp
+
+        ---- START OF: cirQueue.cpp ----
+        #include "cirQueue.h"
+        
+        cirQueue::cirQueue(int size) {
+        	this->size = size;
+        	elements.resize(size);
+        	head = 0;
+        	tail = 0;
+        }
+        
+        void cirQueue::push(sf::CircleShape shape) {
+        	elements[head] = shape;
+        	head++;
+        	if (head == size) {
+        		head = 0;
+        	}
+        	if (head == tail) {
+        		pop();
+        	}
+        }
+        
+        sf::CircleShape cirQueue::pop() {
+        	sf::CircleShape output = elements[tail];
+        	tail++;
+        	if (tail == size) {
+        		tail = 0;
+        	}
+        	return output;
+        }
+        
+        void cirQueue::printToScreen(sf::RenderWindow& window) {
+        	int tempTail = tail;
+        	while (tempTail != head) {
+        		window.draw(elements[tempTail]);
+        		tempTail++;
+        		if (tempTail == size) {
+        			tempTail = 0;
+        		}
+        	}
+        }
+        
+        ---- END OF: cirQueue.cpp ----
+
+    cirQueue.h
+
+        ---- START OF: cirQueue.h ----
+        
+        
+        #ifndef CIRQUEUE_H
+        #define CIRQUEUE_H
+        
+        #include <vector>
+        #include <SFML/Graphics.hpp>
+        
+        class cirQueue {
+        public:
+            // Constructor
+            cirQueue(int size);
+        
+            // Getters
+            sf::CircleShape pop();
+        
+            // Setters
+            void push(sf::CircleShape shape);
+        
+            void printToScreen(sf::RenderWindow& window);
+        
+        
+        private:
+            int size;
+            int head;
+            int tail;
+            std::vector<sf::CircleShape> elements;
+        
+        };
+        
+        
+        
+        #endif //CIRQUEUE_H
+        ---- END OF: cirQueue.h ----
+
+    main.cpp
+
+        ---- START OF: main.cpp ----
+        #include <SFML/Graphics.hpp>
+        #include "Object.h"
+        #include <vector>
+        #include "cirQueue.h"
+        
+        double computeGForce(double m1, double m2, double r);
+        double computeAcceleration(double F, double m);
+        double distanceBetweenTwoObjects(double x1, double y1, double x2, double y2);
+        sf::Vector2f computeForce(Object objectOne, Object objectTwo);
+        
+        std::vector<sf::CircleShape> convertBodies(std::vector<Object> bodies);
+        
+        
+        double G = 10.0; // For testing
+        double dt = 0.1; // DeltaTime (Change in time)
+        
+        int main() {
+            auto window = sf::RenderWindow(sf::VideoMode({800, 600}), "CMake SFML Project");
+            window.setFramerateLimit(1000);
+        
+            cirQueue trails = cirQueue(20);
+        
+            // First object - Sun
+            double sMass = 1.0; // Mass
+            double sX = 400.0; // X Coordinate
+            double sY = 300.0; // Y Coordinate
+        
+            // Second object - Planet A
+            double pMass = 0.000003003; // Mass
+            double pVeloX = 0.0; // Velocity X Coord
+            double pVeloY = 0.223; // Velocity y Coord
+            double pX = 200.0; // X Coordinate
+            double pY = 300.0; // Y Coordinate
+        
+            // Initialize the Sun & the Earth ( 2 Body System )
+            Object sun(sMass, 0, 0, 0, sX, sY);
+            Object earth(pMass, 1, pVeloX, pVeloY, pX, pY);
+        
+            // array of of objects
+            std::vector<Object> bodies = {sun, earth};
+            // Copy of array of objects (Used for N-body system)
+            std::vector<Object> nextBodies = bodies;
+        
+            std::vector<sf::CircleShape> graphicsBodies = convertBodies({sun, earth});
+            int drawNum = 0;
+        
+            while (window.isOpen())
+            {
+                while (const std::optional event = window.pollEvent())
+                {
+                    if (event->is<sf::Event::Closed>())
+                    {
+                        window.close();
+                    }
+                }
+        
+                drawNum++;
+        
+        
+                window.clear();
+                trails.printToScreen(window);
+                for (sf::CircleShape body : graphicsBodies) {
+                    window.draw(body);
+                }
+        
+                window.display();
+        
+                if (drawNum == 1000) {
+                    drawNum = 0;
+                    graphicsBodies[1].setFillColor(sf::Color::White);
+                    trails.push(graphicsBodies[1]);
+                }
+        
+                // For each object in the array, compute the force and add it to the total.
+                for (int i = 0; i < bodies.size(); i++) {
+                    // Initialize total force to 0.
+                    sf::Vector2f totalForce(0, 0);
+        
+                    for (int j = 0; j < bodies.size(); j++) {
+                        if (i == j) {
+                            continue;
+                        }
+                        // Add the force to total force
+                        totalForce += computeForce(bodies[i], bodies[j]);
+                    }
+        
+                    // Update velocity & position
+                    nextBodies[i].velocityUpdate(totalForce.x, totalForce.y, dt);
+                    nextBodies[i].updatePosition(dt);
+                }
+                // set old to new bodies
+                bodies = nextBodies;
+        
+                /**double r = distanceBetweenTwoObjects(sun.getLocation().x, sun.getLocation().y, earth.getLocation().x, earth.getLocation().y);
+                double force = computeGForce(sun.getMass(), earth.getMass(), r);
+                double dx = earth.getLocation().x - sun.getLocation().x;
+                double dy = earth.getLocation().y - sun.getLocation().y;
+                double forceVectorX = -force * (dx / r);
+                double forceVectorY = -force * (dy / r);
+                double accelerationEarthX = computeAcceleration(forceVectorX, earth.getMass());
+                double accelerationEarthY = computeAcceleration(forceVectorY, earth.getMass());
+                double accelerationSunX = computeAcceleration(-forceVectorX, sun.getMass());
+                double accelerationSunY = computeAcceleration(-forceVectorY, sun.getMass());
+                earth.velocityUpdate(accelerationEarthX, accelerationEarthY, dt);
+                sun.velocityUpdate(accelerationSunX, accelerationSunY, dt);
+                earth.updatePosition(dt);
+                sun.updatePosition(dt);**/
+                graphicsBodies = convertBodies({ sun, earth });
+            }
+        }
+        
+        
+        // Computes g force. May turn into setter/getter in class ?
+        double computeGForce(double m1, double m2, double r) {
+            return G * ((m1 * m2) / (r * r));
+        }
+        
+        double computeAcceleration(double F, double m) {
+            return F / m;
+        }
+        
+        // Computes and returns the distance between two objects
+        double distanceBetweenTwoObjects(double x1, double y1, double x2, double y2) {
+            return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+        }
+        
+        // Computes the force between two objects
+        sf::Vector2f computeForce(Object objectOne, Object objectTwo) {
+            sf::Vector2f totalForce(0, 0);
+            double r = distanceBetweenTwoObjects(objectOne.getLocation().x, objectOne.getLocation().y, objectTwo.getLocation().x, objectTwo.getLocation().y);
+            double force = computeGForce(objectOne.getMass(), objectTwo.getMass(), r);
+            double dx = objectTwo.getLocation().x - objectOne.getLocation().x;
+            double dy = objectTwo.getLocation().y - objectOne.getLocation().y;
+            double forceVectorX = -force * (dx / r);
+            double forceVectorY = -force * (dy / r);
+            double accelerationObjectOneX = computeAcceleration(forceVectorX, objectTwo.getMass());
+            double accelerationObjectOneY = computeAcceleration(forceVectorY, objectTwo.getMass());
+            //double accelerationSunX = computeAcceleration(-forceVectorX, objectOne.getMass());
+            //double accelerationSunY = computeAcceleration(-forceVectorY, objectOne.getMass());
+        
+            totalForce.x = accelerationObjectOneX;
+            totalForce.y = accelerationObjectOneY;
+        
+            return totalForce;
+        }
+        
+        
+        // Greg's algorithm for implementation assignment
+        std::vector<sf::CircleShape> convertBodies(std::vector<Object> bodies) {
+            std::vector<sf::CircleShape> graphicsBodies = {};
+            for (Object body : bodies) {
+                sf::CircleShape graphicsBody;
+                int bodyType = body.getType(); // type: 0 = sun, 1 = planet
+                if (bodyType == 0) {
+                    graphicsBody.setRadius(20);
+                    graphicsBody.setFillColor(sf::Color::Yellow);
+                }
+                else if (bodyType == 1) {
+                    graphicsBody.setRadius(10);
+                    graphicsBody.setFillColor(sf::Color::Green);
+                }
+                pos bodyLoc = body.getLocation();
+                graphicsBody.setPosition({ (float)bodyLoc.x,(float)bodyLoc.y });
+                graphicsBodies.push_back(graphicsBody);
+            }
+            return graphicsBodies;
+        }
+        ---- END OF: main.cpp ----
+
+website.html
+
+    ---- START OF: website.html ----
+    <!doctype html>
+    <html lang="en">
+    <head>
+      <meta charset="utf-8" />
+      <title>Solar System Simulation — UI</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <style>
+        :root {
+          --title-size: clamp(2rem, 6vw, 4.2rem);
+          --btn-size: clamp(1rem, 2.5vw, 1.25rem);
+        }
+        * { box-sizing: border-box; }
+        html, body { height: 100%; margin: 0; font-family: system-ui, Arial, sans-serif; }
+    
+        .page { display: none; }
+        .page.active { display: block; }
+    
+        /* HOME */
+        html, body { height: 100%; }
+        #page-home.hero {
+          position: relative;
+          min-height: 100%;
+          display: grid;
+          place-items: center;
+          text-align: center;
+          color: #fff;
+          background: #0c1324 url("https://static-cdn.jtvnw.net/jtv_user_pictures/257fabdc-4a6f-4129-b8c4-d0d1a74adee8-profile_banner-480.jpeg")
+            center / cover no-repeat fixed;
+        }
+        #page-home .title {
+          font-weight: 600;
+          font-size: var(--title-size);
+          line-height: 1.15;
+          text-shadow: 0 6px 24px rgba(0,0,0,.45);
+          margin: 0 1rem 2rem;
+        }
+        #go-sim {
+          font-size: var(--btn-size);
+          padding: .9rem 1.25rem;
+          border: 0;
+          border-radius: .35rem;
+          background: rgba(240,240,240,.9);
+          color: #111;
+          box-shadow: 0 6px 18px rgba(0,0,0,.35);
+          cursor: pointer;
+        }
+        #go-sim:active { transform: translateY(1px); }
+        .exit-wrap {
+          position: absolute;
+          left: 1.25rem;
+          bottom: 1rem;
+          display: grid;
+          grid-template-columns: auto 1fr;
+          gap: .5rem;
+          align-items: end;
+          color: #fff;
+          text-shadow: 0 4px 14px rgba(0,0,0,.6);
+          font-size: clamp(.95rem, 2vw, 1.2rem);
+          user-select: none;
+        }
+        .exit-emoji { font-size: clamp(2.2rem, 4vw, 3rem); line-height: 1; }
+        .exit-text { letter-spacing: .02em; }
+    
+        /* SIMULATION PAGE */
+        #page-sim {
+          display: flex;
+          height: 100vh;
+          background-color: #0d0d0d;
+          color: #fff;
+        }
+    
+        /* Left side: background image area */
+        .sim-display {
+          flex: 2;
+          background: url("https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcR-dFMSOey4QsSWU0pMAgj-PPIWEcYla2e4KD0yYRFXFEJkxP68")
+            center / cover no-repeat;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-right: 4px solid #444;
+        }
+    
+        /* Right side: control panel */
+        .sim-panel {
+          flex: 1;
+          background: #5f5f5f;
+          padding: 2rem;
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          overflow-y: auto;
+        }
+    
+        .panel-title {
+          font-weight: 600;
+          font-size: 1.5rem;
+          color: #fff;
+          margin-bottom: 1rem;
+          text-align: left;
+        }
+    
+        .control {
+          display: flex;
+          flex-direction: column;
+          margin-bottom: 1rem;
+        }
+    
+        .control label {
+          font-size: 1.1rem;
+          margin-bottom: .3rem;
+        }
+    
+        .control input[type="text"] {
+          padding: .4rem;
+          border: none;
+          border-radius: .25rem;
+          margin-bottom: .3rem;
+        }
+    
+        .control input[type="range"] {
+          width: 100%;
+          accent-color: #8c52ff;
+        }
+    
+        .btn {
+          padding: .6rem 1rem;
+          border: none;
+          border-radius: .3rem;
+          background: #8c52ff;
+          color: white;
+          font-weight: 500;
+          cursor: pointer;
+          margin-top: .5rem;
+          align-self: start;
+        }
+    
+        #msg { color: #ffb3b3; font-size: .9rem; }
+    
+        .action-buttons {
+          display: flex;
+          gap: 1rem;
+          margin-top: 1.5rem;
+        }
+    
+        .action-buttons .btn {
+          flex: 1; 
+        }
+    
+        #go-home {
+          background: #333;
+        }
+      </style>
+    </head>
+    <body>
+      <!-- HOME -->
+      <section id="page-home" class="page hero active" aria-label="Main Menu">
+        <div>
+          <h1 class="title">Welcome to the solar system simulation</h1>
+          <button id="go-sim">Click here to go to simulation</button>
+        </div>
+        <div class="exit-wrap" aria-hidden="true">
+          <div class="exit-emoji">🚪</div>
+          <div class="exit-text">exit</div>
+        </div>
+      </section>
+    
+      <!-- SIMULATION PAGE -->
+      <section id="page-sim" class="page" aria-label="Simulation Page">
+        <div class="sim-display">
+          <!-- placeholder orbit area -->
+          <h2 style="font-weight:400; opacity:0.7;">(Simulation Canvas Placeholder)</h2>
+        </div>
+    
+        <div class="sim-panel">
+          <div class="panel-title">Planet Attributes</div>
+          <div id="msg"></div>
+    
+          <div class="control">
+            <label>Mass:</label>
+            <input id="mass" type="text" inputmode="decimal" autocomplete="off" placeholder="Value">
+            <input type="range" min="0" max="100" value="0" id="massRange">
+            <button class="btn" data-action="mass">Apply</button>
+          </div>
+    
+          <div class="control">
+            <label>Position:</label>
+            <input id="position" type="text" inputmode="decimal" autocomplete="off" placeholder="Value">
+            <input type="range" min="0" max="100" value="0" id="positionRange">
+            <button class="btn" data-action="position">Apply</button>
+          </div>
+    
+          <div class="control">
+            <label>Velocity:</label>
+            <input id="velocity" type="text" inputmode="decimal" autocomplete="off" placeholder="Value">
+            <input type="range" min="0" max="100" value="0" id="velocityRange">
+            <button class="btn" data-action="velocity">Apply</button>
+          </div>
+    
+          <div class="action-buttons">
+            <button id="reset" class="btn" type="button" style="background:#d32f2f;">Reset</button>
+            <button id="go-home" class="btn" type="button">Home Page</button>
+          </div>
+        </div>
+      </section>
+    
+      <script>
+        // Routing
+        const home = document.getElementById('page-home');
+        const sim  = document.getElementById('page-sim');
+        const msg  = document.getElementById('msg');
+    
+        document.getElementById('go-sim').addEventListener('click', () => {
+          home.classList.remove('active');
+          sim.classList.add('active');
+        });
+    
+        document.getElementById('go-home').addEventListener('click', () => {
+          sim.classList.remove('active');
+          home.classList.add('active');
+          msg.textContent = '';
+        });
+    
+        // Defaults
+        const DEFAULTS = { mass: 0, position: 0, velocity: 0 };
+        const isNumeric = (s) => s !== '' && isFinite(Number(s));
+        const getEl = (id) => document.getElementById(id);
+    
+        // Apply Buttons
+        document.querySelector('.sim-panel').addEventListener('click', (e) => {
+          const action = e.target?.dataset?.action;
+          if (!action) return;
+          const input = getEl(action).value.trim();
+          if (!isNumeric(input)) { msg.textContent = 'Only enter a valid number'; return; }
+          msg.textContent = '';
+          const val = Number(input);
+          console.log(`Adjust ${action} to`, val);
+        });
+    
+        // Reset
+        document.getElementById('reset').addEventListener('click', () => {
+          getEl('mass').value = DEFAULTS.mass;
+          getEl('position').value = DEFAULTS.position;
+          getEl('velocity').value = DEFAULTS.velocity;
+          msg.textContent = '';
+        });
+      </script>
+    </body>
+    </html>
+    ---- END OF: website.html ----
+
+
+===========================================================================

@@ -53,3 +53,4 @@ void Object::updatePosition(double deltaT) {
     location.x += velocity.x * deltaT;
     location.y += velocity.y * deltaT;
 }
+
