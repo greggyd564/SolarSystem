@@ -42,22 +42,43 @@ int main()
         sf::CircleShape    thumb;
         float min = 0.f, max = 100.f, value = 50.f;
         float left = 16.f, top = 80.f, width = 288.f;
-    } slider;
+    };
 
-    slider.track.setSize({ slider.width, 6.f });
-    slider.track.setPosition({ slider.left, slider.top });
-    slider.track.setFillColor(sf::Color(80, 80, 90));
+    Slider sliders[2];
+    Slider& massSlider = sliders[0];
+    Slider& posSlider = sliders[1];
 
-    slider.thumb.setRadius(10.f);
-    slider.thumb.setOrigin({ 10.f, 10.f }); // center origin
-    slider.thumb.setFillColor(sf::Color(200, 200, 220));
+    massSlider.track.setSize({ massSlider.width, 6.f });
+    massSlider.track.setPosition({ massSlider.left, massSlider.top });
+    massSlider.track.setFillColor(sf::Color(80, 80, 90));
+
+    massSlider.thumb.setRadius(10.f);
+    massSlider.thumb.setOrigin({ 10.f, 10.f }); // center origin
+    massSlider.thumb.setFillColor(sf::Color(200, 200, 220));
+
+    posSlider.track.setSize({posSlider.width, 6.f});
+    posSlider.top = 180;
+    posSlider.track.setPosition({ posSlider.left, posSlider.top });
+    posSlider.track.setFillColor(sf::Color(80, 80, 90));
+
+    posSlider.thumb.setRadius(10.f);
+    posSlider.thumb.setOrigin({ 10.f, 10.f }); // center origin
+    posSlider.thumb.setFillColor(sf::Color(200, 200, 220));
+
+    int sliderBeingDragged = 0;
 
     auto updateThumb = [&] {
-        float t = (slider.value - slider.min) / (slider.max - slider.min);
-        float x = slider.left + t * slider.width;
-        slider.thumb.setPosition({ x, slider.top + 3.f });
+        std::cout << "trying to update thumb: " << sliderBeingDragged << std::endl;
+        float t = (sliders[sliderBeingDragged].value - sliders[sliderBeingDragged].min) / (sliders[sliderBeingDragged].max - sliders[sliderBeingDragged].min);
+        float x = sliders[sliderBeingDragged].left + t * sliders[sliderBeingDragged].width;
+        std::cout << "Moving to position: " << x << ", " << sliders[sliderBeingDragged].top + 3.f << std::endl;
+        sliders[sliderBeingDragged].thumb.setPosition({x, sliders[sliderBeingDragged].top + 3.f});
     };
-    updateThumb();
+
+    for (int i = 0; i < std::size(sliders); i++) {
+        sliderBeingDragged = i;
+        updateThumb();
+    }
 
     bool draggingSlider = false;
     bool inputFocused = false;
@@ -98,7 +119,7 @@ int main()
 
             if (event->is<sf::Event::MouseButtonPressed>() ) { //&& e.mouseButton.button == sf::Mouse::Left) {
                 // Slider hit
-                sf::FloatRect trackBounds(slider.track.getPosition(), slider.track.getSize());
+                sf::FloatRect trackBounds(sliders[sliderBeingDragged].track.getPosition(), sliders[sliderBeingDragged].track.getSize());
                 //trackBounds.top -= 10.f; trackBounds.height += 20.f; // easier to catch
                 //if (trackBounds.contains(uiPos)) {
                     draggingSlider = true;
@@ -116,8 +137,8 @@ int main()
                 //std::cout << "Mouse x: " << sf::Mouse::getPosition().x << std::endl;
                 //std::cout << "Slider.left: " << slider.left << std::endl;
                 //std::cout << "Mouse x to Coords: " << window.mapPixelToCoords(sf::Mouse::getPosition(window)).x << std::endl;
-                float t = std::clamp((window.mapPixelToCoords(sf::Mouse::getPosition(window)).x - slider.left)/slider.width, 0.f, 1.f);
-                slider.value = slider.min + t * (slider.max - slider.min);
+                float t = std::clamp((window.mapPixelToCoords(sf::Mouse::getPosition(window)).x - sliders[sliderBeingDragged].left)/sliders[sliderBeingDragged].width, 0.f, 1.f);
+                sliders[sliderBeingDragged].value = sliders[sliderBeingDragged].min + t * (sliders[sliderBeingDragged].max - sliders[sliderBeingDragged].min);
                 //std::cout << "t: " << t << std::endl;
                 //std::cout << "Slider Value: " << slider.value << std::endl;
                 updateThumb();
@@ -145,9 +166,10 @@ int main()
         uiBg.setFillColor(sf::Color(30, 30, 35)); // dark panel
         window.draw(uiBg);
         window.draw(title);
-        window.draw(slider.track);
-        window.draw(slider.thumb);
-        
+        for (Slider i : sliders) {
+            window.draw(i.track);
+            window.draw(i.thumb);
+        }
         
         window.display();
 
