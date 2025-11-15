@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
+#include <cmath>
 #include "cirQueue.h"
 //#include <cassert>
 using namespace std;
@@ -84,6 +85,12 @@ int main()
         float t = (sliders[sliderBeingDragged].value - sliders[sliderBeingDragged].min) / (sliders[sliderBeingDragged].max - sliders[sliderBeingDragged].min);
         float x = sliders[sliderBeingDragged].left + t * sliders[sliderBeingDragged].width;
         sliders[sliderBeingDragged].thumb.setPosition({x, sliders[sliderBeingDragged].top + 3.f});
+        if (sliderBeingDragged == 0) {
+            massLabel.setString("Mass: " + std::to_string(static_cast<int>(sliders[sliderBeingDragged].value)) + " kg");
+        }
+        else if (sliderBeingDragged == 1) {
+            posLabel.setString("Distance From Sun: " + std::to_string(static_cast<int>(sliders[sliderBeingDragged].value)) + " AU");
+        }
     };
 
     for (int i = 0; i < std::size(sliders); i++) {
@@ -131,7 +138,7 @@ int main()
     // What if we made a loop of objects for shits and giggles ? gpt code cus lazy
     // Add multiple planets
     for (int i = 0; i < 10; i++) {
-        double angle = i * 36.0 * (M_PI / 180.0); // Spread planets evenly around a circle
+        double angle = i * 36.0 * (3.14 / 180.0); // Spread planets evenly around a circle
         double radius = 150.0 + i * 20.0;         // distance from the sun
         double x = sX + radius * cos(angle);
         double y = sY + radius * sin(angle);
