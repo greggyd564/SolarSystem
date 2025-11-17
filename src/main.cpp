@@ -9,6 +9,14 @@
 //#include <cassert>
 using namespace std;
 
+// Helper: normalize a vector
+sf::Vector2f normalize(const sf::Vector2f& v) {
+    float len = std::sqrt(v.x * v.x + v.y * v.y);
+    if (len == 0.f)
+        return sf::Vector2f(0.f, 0.f);
+    return sf::Vector2f(v.x / len, v.y / len);
+}
+
 double computeGForce(double m1, double m2, double r);
 double computeAcceleration(double F, double m);
 double distanceBetweenTwoObjects(double x1, double y1, double x2, double y2);
@@ -73,6 +81,8 @@ int main()
     massSlider.thumb.setOrigin({ 10.f, 10.f });
     massSlider.thumb.setFillColor(sf::Color(200, 200, 220));
 
+    posSlider.min = 3;
+    posSlider.max = 75;
     posSlider.track.setSize({posSlider.width, 6.f});
     posSlider.top = 180;
     posSlider.track.setPosition({ posSlider.left, posSlider.top });
@@ -186,7 +196,13 @@ int main()
             }
             if (event->is<sf::Event::MouseButtonReleased>()) { 
                 draggingSlider = false;
-                bodies[targetedPlanetIdx].setMass(sliders[sliderBeingDragged].value);
+                nextBodies[targetedPlanetIdx].setMass(sliders[0].value);
+                // Deal with updating the position
+                sf::Vector2f dir =  graphicsBodies[targetedPlanetIdx].getPosition() - graphicsBodies[0].getPosition();
+                dir = normalize(dir);
+                dir = graphicsBodies[0].getPosition() + dir * sliders[1].value * 5.f;
+                nextBodies[targetedPlanetIdx].setLocation({ dir.x, dir.y });
+                nextBodies[targetedPlanetIdx].setVelocity({ nextBodies[targetedPlanetIdx].getVelocity().x,.23});
             }
             if (event->is<sf::Event::MouseMoved>() && draggingSlider) {
                 float t = std::clamp((window.mapPixelToCoords(sf::Mouse::getPosition(window)).x - sliders[sliderBeingDragged].left)/sliders[sliderBeingDragged].width, 0.f, 1.f);
