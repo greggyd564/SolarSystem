@@ -195,14 +195,19 @@ int main()
                 }
             }
             if (event->is<sf::Event::MouseButtonReleased>()) { 
-                draggingSlider = false;
-                nextBodies[targetedPlanetIdx].setMass(sliders[0].value);
-                // Deal with updating the position
-                sf::Vector2f dir =  graphicsBodies[targetedPlanetIdx].getPosition() - graphicsBodies[0].getPosition();
-                dir = normalize(dir);
-                dir = graphicsBodies[0].getPosition() + dir * sliders[1].value * 5.f;
-                nextBodies[targetedPlanetIdx].setLocation({ dir.x, dir.y });
-                nextBodies[targetedPlanetIdx].setVelocity({ nextBodies[targetedPlanetIdx].getVelocity().x,.23});
+                if (draggingSlider == true) {
+                    draggingSlider = false;
+                    if (sliderBeingDragged == 0) {
+                        nextBodies[targetedPlanetIdx].setMass(sliders[0].value);
+                    }
+                    // Deal with updating the position
+                    else if (sliderBeingDragged == 1) {
+                        sf::Vector2f dir = graphicsBodies[targetedPlanetIdx].getPosition() - graphicsBodies[0].getPosition();
+                        dir = normalize(dir);
+                        dir = graphicsBodies[0].getPosition() + dir * sliders[1].value * 5.f;
+                        nextBodies[targetedPlanetIdx].setLocation({ dir.x, dir.y });
+                    }
+                }
             }
             if (event->is<sf::Event::MouseMoved>() && draggingSlider) {
                 float t = std::clamp((window.mapPixelToCoords(sf::Mouse::getPosition(window)).x - sliders[sliderBeingDragged].left)/sliders[sliderBeingDragged].width, 0.f, 1.f);
