@@ -184,13 +184,19 @@ int main()
                 window.close();
             }
 
-            if (event->is<sf::Event::MouseButtonPressed>() ) { 
+            if (event->is<sf::Event::MouseButtonPressed>()) {
                 sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
                 for (int i = 0; i < std::size(sliders); i++) {
                     if (sliders[i].thumb.getGlobalBounds().contains(mousePos)) {
                         sliderBeingDragged = i;
                         draggingSlider = true;
                         break;
+                    }
+                }
+                mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window), worldView);
+                for (int i = 1; i < std::size(graphicsBodies); i++) {
+                    if (graphicsBodies[i].getGlobalBounds().contains(mousePos)){
+                        targetedPlanetIdx = i;
                     }
                 }
             }
