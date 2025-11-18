@@ -262,6 +262,7 @@ int main()
             for (int l = 0; l < bodies.size(); l++) {
                 graphicsBodies[l].setFillColor(sf::Color::White);
                 graphicsBodies[l].setRadius(5);
+                graphicsBodies[l].setOrigin({ 5, 5 });
                 trails.push(graphicsBodies[l]);
             }
         }
@@ -354,10 +355,12 @@ std::vector<sf::CircleShape> convertBodies(std::vector<Object> bodies) {
         int bodyType = body.getType(); // type: 0 = sun, 1 = planet
         if (bodyType == 0) {
             graphicsBody.setRadius(20);
+            graphicsBody.setOrigin({ 20,20 });
             graphicsBody.setFillColor(sf::Color::Yellow);
         }
         else if (bodyType == 1) {
             graphicsBody.setRadius(10);
+            graphicsBody.setOrigin({ 10, 10 });
             graphicsBody.setFillColor(sf::Color::Green);
         }
         pos bodyLoc = body.getLocation();
