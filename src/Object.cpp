@@ -1,11 +1,11 @@
 #include "Object.h"
 
 // constructor
-Object::Object(double mass, int type, double veloX, double veloY, double x, double y) {
+Object::Object(double mass, int type, double veloX, double veloY, double veloZ, double x, double y, double z) {
     this->mass = mass;
     this->type = type;
-    velocity = { veloX, veloY };
-    location = { x, y };
+    velocity = { veloX, veloY, veloZ};
+    location = { x, y, z };
 }
 
 // Getter for location
@@ -44,13 +44,15 @@ void Object::setVelocity(pos newVelo) {
 }
 
 // Updates the Velocity
-void Object::velocityUpdate(double accelerationX, double accelerationY, double deltaT) {
+void Object::velocityUpdate(double accelerationX, double accelerationY, double accelerationZ, double deltaT) {
     velocity.x += accelerationX * deltaT;
     velocity.y += accelerationY * deltaT;
+    velocity.z += accelerationZ * deltaT;
 }
 
 void Object::updatePosition(double deltaT) {
     location.x += velocity.x * deltaT;
     location.y += velocity.y * deltaT;
+    location.z += velocity.z * deltaT;
 }
 

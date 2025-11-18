@@ -10,8 +10,8 @@ using namespace std;
 
 double computeGForce(double m1, double m2, double r);
 double computeAcceleration(double F, double m);
-double distanceBetweenTwoObjects(double x1, double y1, double x2, double y2);
-sf::Vector2f computeForce(Object objectOne, Object objectTwo);
+double distanceBetweenTwoObjects(double x1, double y1, double x2, double y2, double z1, double z2);
+sf::Vector3f computeForce(Object objectOne, Object objectTwo);
 
 std::vector<sf::CircleShape> convertBodies(std::vector<Object> bodies);
 
@@ -102,25 +102,30 @@ int main()
     double sMass = 1.0; // Mass
     double sX = 385.0; // X Coordinate
     double sY = 300.0; // Y Coordinate
+    double sZ = 300.0; // Z Coordinate
 
     // Second object - Planet A
     double pMass = 0.000003003; // Mass
     double pVeloX = 0.0; // Velocity X Coord
     double pVeloY = 0.223; // Velocity y Coord
+    double pVeloZ = 0.225; // Velocity Z Coord
     double pX = 200.0; // X Coordinate
     double pY = 300.0; // Y Coordinate
+    double pZ = 300.0;
 
     // Third Object - Planet B
     double pMass1 = 0.000003003; // Mass
     double pVeloX1 = 0.0; // Velocity X Coord
     double pVeloY1 = 0.223; // Velocity y Coord
+    double pVeloZ1 = 0.225;
     double pX1 = 200.0; // X Coordinate
     double pY1 = 200.0; // Y Coordinate
+    double pZ1 = 0.225; // Z Coordinate
 
     // Initialize as many objects as you want! ( N Body System )
-    Object sun(sMass, 0, 0, 0, sX, sY);
-    Object earth(pMass, 1, pVeloX, pVeloY, pX, pY);
-    Object mars(pMass1, 1, pVeloX1, pVeloY1, pX1, pY1);
+    Object sun(sMass, 0, 0, 0, 0, sX, sY, sZ);
+    Object earth(pMass, 1, pVeloX, pVeloY, pVeloZ, pX, pY, pZ);
+    Object mars(pMass1, 1, pVeloX1, pVeloY1, pVeloZ1, pX1, pY1, pZ1);
 
 
 
@@ -130,7 +135,7 @@ int main()
 
     // What if we made a loop of objects for shits and giggles ? gpt code cus lazy
     // Add multiple planets
-    for (int i = 0; i < 10; i++) {
+    /**for (int i = 0; i < 10; i++) {
         double angle = i * 36.0 * (M_PI / 180.0); // Spread planets evenly around a circle
         double radius = 150.0 + i * 20.0;         // distance from the sun
         double x = sX + radius * cos(angle);
@@ -142,7 +147,7 @@ int main()
         double vy = v * cos(angle);
 
         bodies.push_back(Object(pMass, 1, vx, vy, x, y));
-    } // end of gpt slop
+    } // end of gpt slop **/
 
 
     // Copy of array of objects (Used for N-body system)
@@ -223,7 +228,7 @@ int main()
         // For each object in the array, compute the force and add it to the total.
         for (int i = 0; i < bodies.size(); i++) {
             // Initialize total force to 0.
-            sf::Vector2f totalForce(0, 0);
+            sf::Vector3f totalForce(0, 0, 0);
 
             for (int j = 0; j < bodies.size(); j++) {
                 if (i == j) {
@@ -234,7 +239,7 @@ int main()
             }
 
             // Update velocity & position
-            nextBodies[i].velocityUpdate(totalForce.x, totalForce.y, dt);
+            nextBodies[i].velocityUpdate(totalForce.x, totalForce.y, totalForce.z, dt);
             nextBodies[i].updatePosition(dt);
         }
         // set old to new bodies
@@ -274,29 +279,32 @@ double computeAcceleration(double F, double m) {
 }
 
 // Computes and returns the distance between two objects
-double distanceBetweenTwoObjects(double x1, double y1, double x2, double y2) {
-    return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+double distanceBetweenTwoObjects(double x1, double y1, double x2, double y2, double z1, double z2) {
+    return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1) + (z2 - z1) * (z2 - z1));
 }
 
 // Computes the force between two objects
 // was originally my code but was like 90% there and the final 10% of the math was confusing so gpt did rest
-sf::Vector2f computeForce(Object objectOne, Object objectTwo) {
+sf::Vector3f computeForce(Object objectOne, Object objectTwo) {
     double dx = objectTwo.getLocation().x - objectOne.getLocation().x;
     double dy = objectTwo.getLocation().y - objectOne.getLocation().y;
+    double dz = objectTwo.getLocation().z - objectOne.getLocation().z;
     double r = distanceBetweenTwoObjects(objectOne.getLocation().x, objectOne.getLocation().y,
-                                         objectTwo.getLocation().x, objectTwo.getLocation().y);
-    if (r == 0) return {0, 0}; // avoid division by zero
+                                         objectTwo.getLocation().x, objectTwo.getLocation().y, objectOne.getLocation().z, objectTwo.getLocation().z);
+    if (r == 0) return {0, 0, 0}; // avoid division by zero
 
     double force = computeGForce(objectOne.getMass(), objectTwo.getMass(), r);
     // direction from one to two
     double fx = force * (dx / r);
     double fy = force * (dy / r);
+    double fz = force * (dz / r);
 
     // acceleration of objectOne = F / m1
     double ax = fx / objectOne.getMass();
     double ay = fy / objectOne.getMass();
+    double az = fz / objectOne.getMass();
 
-    return sf::Vector2f(ax, ay);
+    return sf::Vector3f(ax, ay, az);
 }
 
 

@@ -1,14 +1,14 @@
 #ifndef OBJECT_H
 #define OBJECT_H
-struct pos { // X/Y Coordinates for Position & Velocity
-    double x, y;
+struct pos { // X/Y/Z Coordinates for Position & Velocity
+    double x, y, z;
 };
 
 
 class Object {
 public:
     // Constructor
-    Object(double mass, int type, double veloX, double veloY, double x, double y);
+    Object(double mass, int type, double veloX, double veloY, double veloZ, double x, double y, double z);
 
     // Getters
     double getMass();
@@ -22,7 +22,7 @@ public:
     void setLocation(pos newLocation);
 
     // Updates velocity
-    void velocityUpdate(double accelerationX, double accelerationY, double deltaT);
+    void velocityUpdate(double accelerationX, double accelerationY, double accelerationZ, double deltaT);
     // updates Position
     void updatePosition(double deltaT);
 
