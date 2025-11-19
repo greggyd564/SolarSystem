@@ -1,0 +1,82 @@
+<!doctype>               
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Solar System Simulation — UI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --title-size: clamp(2rem, 6vw, 4.2rem);
+      --btn-size: clamp(1rem, 2.5vw, 1.25rem);
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; font-family: system-ui, Arial, sans-serif; }
+
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* HOME */
+    html, body { height: 100%; }
+    #page-home.hero {
+      position: relative;
+      min-height: 100%;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: #fff;
+      background: #0c1324 url("https://upload.wikimedia.org/wikipedia/commons/5/58/Solar-System-blank.jpg")
+        center / cover no-repeat fixed;
+    }
+    #page-home .title {
+      font-weight: 600;
+      font-size: var(--title-size);
+      line-height: 1.15;
+      text-shadow: 0 6px 24px rgba(0,0,0,.45);
+      margin: 0 1rem 2rem;
+    }
+    #go-sim {
+      font-size: var(--btn-size);
+      padding: .9rem 1.25rem;
+      border: 0;
+      border-radius: .35rem;
+      background: rgba(240,240,240,.9);
+      color: #111;
+      box-shadow: 0 6px 18px rgba(0,0,0,.35);
+      cursor: pointer;
+    }
+    #go-sim:active { transform: translateY(1px); }
+    .exit-wrap {
+      position: absolute;
+      left: 1.25rem;
+      bottom: 1rem;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: .5rem;
+      align-items: end;
+      color: #fff;
+      text-shadow: 0 4px 14px rgba(0,0,0,.6);
+      font-size: clamp(.95rem, 2vw, 1.2rem);
+      user-select: none;
+    }
+    .exit-emoji { font-size: clamp(2.2rem, 4vw, 3rem); line-height: 1; }
+    .exit-text { letter-spacing: .02em; }
+  
+  </style>
+</head>
+<body>
+  <!-- HOME -->
+  <section id="page-home" class="page hero active" aria-label="Main Menu">
+    <div>
+      <h1 class="title">Welcome to the solar system simulation</h1>
+      <a href="https://blue.cs.sonoma.edu/~jbelon/SSSim.html" id="go-sim">Click here to go to simulation</a>
+    </div>
+
+    <div class="exit-wrap" aria-hidden="true">
+      <a href="https://blue.cs.sonoma.edu/~dlgarcia/about/" class="exit-link">
+        <div class="exit-emoji">🚪</div>
+        <div class="exit-text">about page</div>
+      </a>
+    </div>
+  </section>
+</body>
+</html>
