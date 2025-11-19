@@ -39,7 +39,13 @@ int main()
     uiView.setSize({330, 600});
     uiView.setCenter({165, 300});
     uiView.setViewport(sf::FloatRect({.7, 0}, {.3, 1}));
-    sf::Font font(std::string(PROJECT_ROOT) + "/arial.ttf");
+    sf::Texture texPlanet;
+    texPlanet.loadFromFile(std::string(PROJECT_ROOT) + "/resources/planet_64.png");
+    texPlanet.setSmooth(true);
+    sf::Texture texSun;
+    texSun.loadFromFile(std::string(PROJECT_ROOT) + "/resources/sun_64.png");
+    texSun.setSmooth(true);
+    sf::Font font(std::string(PROJECT_ROOT) + "/resources/arial.ttf");
     sf::Text title(font);
     title.setString("Planet Properties");
     title.setCharacterSize(24);
@@ -243,6 +249,12 @@ int main()
         trails.printToScreen(window);
         int draw_loop_idx = 0;
         for (sf::CircleShape body : graphicsBodies) {
+            if (draw_loop_idx == 0) {
+                body.setTexture(&texSun);
+            }
+            else {
+                body.setTexture(&texPlanet);
+            }
             if (draw_loop_idx == targetedPlanetIdx) {
                 body.setFillColor(sf::Color::Blue);
             }
