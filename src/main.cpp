@@ -197,6 +197,11 @@ int main()
                 for (int i = 1; i < std::size(graphicsBodies); i++) {
                     if (graphicsBodies[i].getGlobalBounds().contains(mousePos)){
                         targetedPlanetIdx = i;
+                        massSlider.value = bodies[i].getMass();
+                        massLabel.setString("Mass: " + to_string(sliders[0].value * 100000) + " kg");
+                        float t = (sliders[0].value - sliders[0].min) / (sliders[0].max - sliders[0].min);
+                        float x = sliders[0].left + t * sliders[0].width;
+                        sliders[0].thumb.setPosition({ x, sliders[0].top + 3.f });
                     }
                 }
             }
@@ -224,6 +229,14 @@ int main()
 
         drawNum++;
         
+        if (!draggingSlider) {
+            sf::Vector2f dir = graphicsBodies[targetedPlanetIdx].getPosition() - graphicsBodies[0].getPosition();
+            sliders[1].value = std::clamp(sqrtf(dir.x * dir.x + dir.y * dir.y) / 5, sliders[1].min, sliders[1].max);
+            float t = (sliders[1].value - sliders[1].min) / (sliders[1].max - sliders[1].min);
+            float x = sliders[1].left + t * sliders[1].width;
+            sliders[1].thumb.setPosition({ x, sliders[1].top + 3.f });
+            posLabel.setString("Distance From Sun: " + std::to_string(static_cast<int>(sliders[1].value)) + " AU");
+        }
 
         window.clear();
         window.setView(worldView);
