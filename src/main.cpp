@@ -4,9 +4,18 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
+#include <cmath>
 #include "cirQueue.h"
 //#include <cassert>
 using namespace std;
+
+// Helper: normalize a vector
+sf::Vector2f normalize(const sf::Vector2f& v) {
+    float len = std::sqrt(v.x * v.x + v.y * v.y);
+    if (len == 0.f)
+        return sf::Vector2f(0.f, 0.f);
+    return sf::Vector2f(v.x / len, v.y / len);
+}
 
 double computeGForce(double m1, double m2, double r);
 double computeAcceleration(double F, double m);
@@ -30,7 +39,13 @@ int main()
     uiView.setSize({330, 600});
     uiView.setCenter({165, 300});
     uiView.setViewport(sf::FloatRect({.7, 0}, {.3, 1}));
-    sf::Font font(std::string(PROJECT_ROOT) + "/arial.ttf");
+    sf::Texture texPlanet;
+    texPlanet.loadFromFile(std::string(PROJECT_ROOT) + "/resources/planet_64.png");
+    texPlanet.setSmooth(true);
+    sf::Texture texSun;
+    texSun.loadFromFile(std::string(PROJECT_ROOT) + "/resources/sun_64.png");
+    texSun.setSmooth(true);
+    sf::Font font(std::string(PROJECT_ROOT) + "/resources/arial.ttf");
     sf::Text title(font);
     title.setString("Planet Properties");
     title.setCharacterSize(24);
@@ -60,6 +75,9 @@ int main()
     Slider& massSlider = sliders[0];
     Slider& posSlider = sliders[1];
 
+    massSlider.min = 0.000001;
+    massSlider.max = 0.000100;
+    massSlider.value = 0.000003003;
     massSlider.track.setSize({ massSlider.width, 6.f });
     massSlider.top = 100;
     massSlider.track.setPosition({ massSlider.left, massSlider.top });
@@ -69,6 +87,8 @@ int main()
     massSlider.thumb.setOrigin({ 10.f, 10.f });
     massSlider.thumb.setFillColor(sf::Color(200, 200, 220));
 
+    posSlider.min = 3;
+    posSlider.max = 75;
     posSlider.track.setSize({posSlider.width, 6.f});
     posSlider.top = 180;
     posSlider.track.setPosition({ posSlider.left, posSlider.top });
@@ -84,6 +104,12 @@ int main()
         float t = (sliders[sliderBeingDragged].value - sliders[sliderBeingDragged].min) / (sliders[sliderBeingDragged].max - sliders[sliderBeingDragged].min);
         float x = sliders[sliderBeingDragged].left + t * sliders[sliderBeingDragged].width;
         sliders[sliderBeingDragged].thumb.setPosition({x, sliders[sliderBeingDragged].top + 3.f});
+        if (sliderBeingDragged == 0) {
+            massLabel.setString("Mass: " + to_string(sliders[sliderBeingDragged].value * 100000) + " kg");
+        }
+        else if (sliderBeingDragged == 1) {
+            posLabel.setString("Distance From Sun: " + std::to_string(static_cast<int>(sliders[sliderBeingDragged].value)) + " AU");
+        }
     };
 
     for (int i = 0; i < std::size(sliders); i++) {
@@ -131,7 +157,7 @@ int main()
     // What if we made a loop of objects for shits and giggles ? gpt code cus lazy
     // Add multiple planets
     for (int i = 0; i < 10; i++) {
-        double angle = i * 36.0 * (M_PI / 180.0); // Spread planets evenly around a circle
+        double angle = i * 36.0 * (3.14 / 180.0); // Spread planets evenly around a circle
         double radius = 150.0 + i * 20.0;         // distance from the sun
         double x = sX + radius * cos(angle);
         double y = sY + radius * sin(angle);
@@ -149,8 +175,12 @@ int main()
     std::vector<Object> nextBodies = bodies;
 
     // should this be changed to bodies inside {} ? idk i tried and nothing was different lmk
+    // Probably should be (bodies), but it doesn't matter because of frame rate
     std::vector<sf::CircleShape> graphicsBodies = convertBodies({sun, earth});
     int drawNum = 0;
+    int targetedPlanetIdx = 1;
+
+    bool paused = false;                  // *** ADDED: pause flag
 
     while (window.isOpen())
     {
@@ -162,7 +192,17 @@ int main()
                 window.close();
             }
 
-            if (event->is<sf::Event::MouseButtonPressed>() ) { 
+            // *** ADDED: toggle pause with P
+            if (event->is<sf::Event::KeyPressed>()) {                 // *** ADDED
+                const auto &kp = event->getIf<sf::Event::KeyPressed>(); // *** ADDED
+                if (kp->scancode == sf::Keyboard::Scan::P) {           // *** ADDED
+                    paused = !paused;                                 // *** ADDED
+                    std::cout << (paused? "PAUSED\n"                // *** ADDED
+                                        : "RESUMED\n");              // *** ADDED
+                }                                                     // *** ADDED
+            }
+
+            if (event->is<sf::Event::MouseButtonPressed>()) {
                 sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
                 for (int i = 0; i < std::size(sliders); i++) {
                     if (sliders[i].thumb.getGlobalBounds().contains(mousePos)) {
@@ -171,9 +211,32 @@ int main()
                         break;
                     }
                 }
+                mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window), worldView);
+                for (int i = 1; i < std::size(graphicsBodies); i++) {
+                    if (graphicsBodies[i].getGlobalBounds().contains(mousePos)){
+                        targetedPlanetIdx = i;
+                        massSlider.value = bodies[i].getMass();
+                        massLabel.setString("Mass: " + to_string(sliders[0].value * 100000) + " kg");
+                        float t = (sliders[0].value - sliders[0].min) / (sliders[0].max - sliders[0].min);
+                        float x = sliders[0].left + t * sliders[0].width;
+                        sliders[0].thumb.setPosition({ x, sliders[0].top + 3.f });
+                    }
+                }
             }
-            if (event->is<sf::Event::MouseButtonReleased>()) { 
-                draggingSlider = false;
+            if (event->is<sf::Event::MouseButtonReleased>()) {
+                if (draggingSlider == true) {
+                    draggingSlider = false;
+                    if (sliderBeingDragged == 0) {
+                        nextBodies[targetedPlanetIdx].setMass(sliders[0].value);
+                    }
+                    // Deal with updating the position
+                    else if (sliderBeingDragged == 1) {
+                        sf::Vector2f dir = graphicsBodies[targetedPlanetIdx].getPosition() - graphicsBodies[0].getPosition();
+                        dir = normalize(dir);
+                        dir = graphicsBodies[0].getPosition() + dir * sliders[1].value * 5.f;
+                        nextBodies[targetedPlanetIdx].setLocation({ dir.x, dir.y });
+                    }
+                }
             }
             if (event->is<sf::Event::MouseMoved>() && draggingSlider) {
                 float t = std::clamp((window.mapPixelToCoords(sf::Mouse::getPosition(window)).x - sliders[sliderBeingDragged].left)/sliders[sliderBeingDragged].width, 0.f, 1.f);
@@ -184,12 +247,31 @@ int main()
 
         drawNum++;
         
+        if (!draggingSlider) {
+            sf::Vector2f dir = graphicsBodies[targetedPlanetIdx].getPosition() - graphicsBodies[0].getPosition();
+            sliders[1].value = std::clamp(sqrtf(dir.x * dir.x + dir.y * dir.y) / 5, sliders[1].min, sliders[1].max);
+            float t = (sliders[1].value - sliders[1].min) / (sliders[1].max - sliders[1].min);
+            float x = sliders[1].left + t * sliders[1].width;
+            sliders[1].thumb.setPosition({ x, sliders[1].top + 3.f });
+            posLabel.setString("Distance From Sun: " + std::to_string(static_cast<int>(sliders[1].value)) + " AU");
+        }
 
         window.clear();
         window.setView(worldView);
         trails.printToScreen(window);
+        int draw_loop_idx = 0;
         for (sf::CircleShape body : graphicsBodies) {
+            if (draw_loop_idx == 0) {
+                body.setTexture(&texSun);
+            }
+            else {
+                body.setTexture(&texPlanet);
+            }
+            if (draw_loop_idx == targetedPlanetIdx) {
+                body.setFillColor(sf::Color::Blue);
+            }
             window.draw(body);
+            draw_loop_idx++;
         }
 
         //assert(graphicsBodies[0].getPosition().x == (float)sun.getLocation().x);
@@ -198,7 +280,7 @@ int main()
         // Render UI Here!!!
         sf::RectangleShape uiBg;
         uiBg.setSize({ 330, static_cast<float>(window.getSize().y) });
-        uiBg.setPosition({ 0.f, 0.f }); 
+        uiBg.setPosition({ 0.f, 0.f });
         uiBg.setFillColor(sf::Color(30, 30, 35));
         window.draw(uiBg);
         window.draw(title);
@@ -208,14 +290,23 @@ int main()
             window.draw(i.track);
             window.draw(i.thumb);
         }
-        
+
         window.display();
+
+        // *** ADDED: if paused, skip physics update and go to next frame
+        if (paused) {                                // *** ADDED
+            graphicsBodies = convertBodies(bodies);  // *** ADDED (keep visuals in sync)
+            drawNum = 0;
+            continue;                                // *** ADDED
+        }
 
         // changed to 100 looks cool idk
         if (drawNum == 100) {
             drawNum = 0;
             for (int l = 0; l < bodies.size(); l++) {
                 graphicsBodies[l].setFillColor(sf::Color::White);
+                graphicsBodies[l].setRadius(5);
+                graphicsBodies[l].setOrigin({ 5, 5 });
                 trails.push(graphicsBodies[l]);
             }
         }
@@ -256,7 +347,6 @@ int main()
         sun.velocityUpdate(accelerationSunX, accelerationSunY, dt);
         earth.updatePosition(dt);
         sun.updatePosition(dt);**/
-
 
         graphicsBodies = convertBodies(bodies);
 
@@ -308,10 +398,12 @@ std::vector<sf::CircleShape> convertBodies(std::vector<Object> bodies) {
         int bodyType = body.getType(); // type: 0 = sun, 1 = planet
         if (bodyType == 0) {
             graphicsBody.setRadius(20);
+            graphicsBody.setOrigin({ 20,20 });
             graphicsBody.setFillColor(sf::Color::Yellow);
         }
         else if (bodyType == 1) {
             graphicsBody.setRadius(10);
+            graphicsBody.setOrigin({ 10, 10 });
             graphicsBody.setFillColor(sf::Color::Green);
         }
         pos bodyLoc = body.getLocation();
