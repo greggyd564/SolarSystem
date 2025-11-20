@@ -180,6 +180,8 @@ int main()
     int drawNum = 0;
     int targetedPlanetIdx = 1;
 
+    bool paused = false;                  // *** ADDED: pause flag
+
     while (window.isOpen())
     {
         //sf::Event e;
@@ -188,6 +190,16 @@ int main()
             if (event->is<sf::Event::Closed>())
             {
                 window.close();
+            }
+
+            // *** ADDED: toggle pause with P
+            if (event->is<sf::Event::KeyPressed>()) {                 // *** ADDED
+                const auto &kp = event->getIf<sf::Event::KeyPressed>(); // *** ADDED
+                if (kp->scancode == sf::Keyboard::Scan::P) {           // *** ADDED
+                    paused = !paused;                                 // *** ADDED
+                    std::cout << (paused? "PAUSED\n"                // *** ADDED
+                                        : "RESUMED\n");              // *** ADDED
+                }                                                     // *** ADDED
             }
 
             if (event->is<sf::Event::MouseButtonPressed>()) {
@@ -211,7 +223,7 @@ int main()
                     }
                 }
             }
-            if (event->is<sf::Event::MouseButtonReleased>()) { 
+            if (event->is<sf::Event::MouseButtonReleased>()) {
                 if (draggingSlider == true) {
                     draggingSlider = false;
                     if (sliderBeingDragged == 0) {
@@ -268,7 +280,7 @@ int main()
         // Render UI Here!!!
         sf::RectangleShape uiBg;
         uiBg.setSize({ 330, static_cast<float>(window.getSize().y) });
-        uiBg.setPosition({ 0.f, 0.f }); 
+        uiBg.setPosition({ 0.f, 0.f });
         uiBg.setFillColor(sf::Color(30, 30, 35));
         window.draw(uiBg);
         window.draw(title);
@@ -278,8 +290,15 @@ int main()
             window.draw(i.track);
             window.draw(i.thumb);
         }
-        
+
         window.display();
+
+        // *** ADDED: if paused, skip physics update and go to next frame
+        if (paused) {                                // *** ADDED
+            graphicsBodies = convertBodies(bodies);  // *** ADDED (keep visuals in sync)
+            drawNum = 0;
+            continue;                                // *** ADDED
+        }
 
         // changed to 100 looks cool idk
         if (drawNum == 100) {
@@ -328,7 +347,6 @@ int main()
         sun.velocityUpdate(accelerationSunX, accelerationSunY, dt);
         earth.updatePosition(dt);
         sun.updatePosition(dt);**/
-
 
         graphicsBodies = convertBodies(bodies);
 
