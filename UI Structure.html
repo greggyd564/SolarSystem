@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Solar System – Commit 1</title>
+<style>
+  body {
+    font-family: system-ui, sans-serif;
+    padding: 20px;
+    background: #10141d;
+    color: #e5e9f0;
+  }
+  h3 { margin-bottom: 6px; }
+  label { display: block; margin: 8px 0; }
+  input[type="range"] { width: 160px; }
+  #planet-nav button {
+    margin-right: 4px; padding: 4px 10px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== SIMULATION CONTROLS ==================== -->
+<h3>— SIMULATION —</h3>
+<label>Speed:
+  <input id="speedSlider" type="range" min="1" max="10" value="5">
+  <input id="speedBox" type="number" min="1" max="10" value="5">
+  <button id="speedReset">Reset</button>
+</label>
+
+<label>Zoom:
+  <input id="zoomSlider" type="range" min="1" max="6" value="3">
+  <input id="zoomBox" type="number" min="1" max="6" value="3">
+  <button id="zoomReset">Reset</button>
+</label>
+
+
+<!-- ==================== PLANET CONTROLS ==================== -->
+<h3>— PLANET —</h3>
+
+<label>Name:
+  <input id="planetName" type="text">
+</label>
+
+<label>Color:
+  <input id="planetColor" type="color" value="#00aaff">
+</label>
+
+<label>Radius:
+  <input id="planetRadius" type="range" min="0.1" max="5" step="0.1" value="1">
+  <input id="planetRadiusBox" type="number" min="0.1" max="5" step="0.1" value="1">
+  <button id="radiusReset">Reset</button>
+</label>
+
+<label>Mass:
+  <input id="planetMass" type="range" min="0.1" max="10" step="0.1" value="1">
+  <input id="planetMassBox" type="number" min="0.1" max="10" step="0.1" value="1">
+  <button id="massReset">Reset</button>
+</label>
+
+<label>Velocity:
+  <input id="planetVelocity" type="range" min="0" max="3" step="0.1" value="1">
+  <input id="planetVelocityBox" type="number" min="0" max="3" step="0.1" value="1">
+  <button id="velocityReset">Reset</button>
+</label>
+
+<label>Distance:
+  <input id="planetDistance" type="range" min="0.2" max="10" step="0.2" value="1">
+  <input id="planetDistanceBox" type="number" min="0.2" max="10" step="0.2" value="1">
+  <button id="distanceReset">Reset</button>
+</label>
+
+
+<!-- ==================== PLANET NAVIGATION ==================== -->
+<div id="planet-nav" style="margin-top: 10px;">
+  <button id="prevBtn">Prev</button>
+  <button id="addBtn">Add</button>
+  <button id="delBtn">Del</button>
+  <button id="nextBtn">Next</button>
+</div>
+
+
+<script>
+/* ================================================================
+   Planet + PlanetList Data Model
+================================================================ */
+
+class Planet {
+  constructor(name, color, radius, mass, velocity, distance) {
+    this.name = name;
+    this.color = color;
+    this.radius = radius;
+    this.mass = mass;
+    this.velocity = velocity;
+    this.distance = distance;
+  }
+}
+
+class PlanetList {
+  constructor() {
+    this.planets = [];
+    this.currentIndex = 0;
+  }
+
+  addPlanet() {
+    const baseName = "Earth";
+    let count = 1;
+    let finalName = baseName;
+
+    // Auto-name: Earth, Earth 2, Earth 3...
+    while (this.planets.some(p => p.name === finalName)) {
+      count++;
+      finalName = `${baseName} ${count}`;
+    }
+
+    const newPlanet = new Planet(finalName, "#00aaff", 1, 1, 1, 1);
+    this.planets.push(newPlanet);
+    this.currentIndex = this.planets.length - 1;
+    return newPlanet;
+  }
+
+  deleteCurrent() {
+    if (this.planets.length <= 1) return; // don't delete last planet
+    this.planets.splice(this.currentIndex, 1);
+    this.currentIndex = this.currentIndex % this.planets.length;
+  }
+
+  // CYCLED navigation
+  next() {
+    this.currentIndex = (this.currentIndex + 1) % this.planets.length;
+  }
+
+  prev() {
+    this.currentIndex =
+      (this.currentIndex - 1 + this.planets.length) % this.planets.length;
+  }
+
+  getCurrent() {
+    return this.planets[this.currentIndex];
+  }
+}
+
+
+/* ================================================================
+   Initialize Planet List
+================================================================ */
+
+const planetList = new PlanetList();
+planetList.addPlanet(); // start with one default Earth
+
+
+/* ================================================================
+   UI Loading Helper
+================================================================ */
+
+function loadPlanetIntoUI() {
+  const p = planetList.getCurrent();
+
+  planetName.value = p.name;
+  planetColor.value = p.color;
+  planetRadius.value = planetRadiusBox.value = p.radius;
+  planetMass.value = planetMassBox.value = p.mass;
+  planetVelocity.value = planetVelocityBox.value = p.velocity;
+  planetDistance.value = planetDistanceBox.value = p.distance;
+
+  // Delete button only disabled if only 1 planet exists
+  delBtn.disabled = (planetList.planets.length === 1);
+}
+
+
+/* ================================================================
+   Navigation Button Hooks
+================================================================ */
+
+prevBtn.onclick = () => {
+  planetList.prev();
+  loadPlanetIntoUI();
+};
+
+nextBtn.onclick = () => {
+  planetList.next();
+  loadPlanetIntoUI();
+};
+
+addBtn.onclick = () => {
+  planetList.addPlanet();
+  loadPlanetIntoUI();
+};
+
+delBtn.onclick = () => {
+  planetList.deleteCurrent();
+  loadPlanetIntoUI();
+};
+
+
+/* ================================================================
+   Sync UI Input → Planet Object
+================================================================ */
+
+// name
+planetName.oninput = () => {
+  planetList.getCurrent().name = planetName.value;
+};
+
+// color
+planetColor.oninput = () => {
+  planetList.getCurrent().color = planetColor.value;
+};
+
+// radius
+planetRadius.oninput = () => {
+  planetRadiusBox.value = planetRadius.value;
+  planetList.getCurrent().radius = parseFloat(planetRadius.value);
+};
+planetRadiusBox.oninput = () => {
+  planetRadius.value = planetRadiusBox.value;
+  planetList.getCurrent().radius = parseFloat(planetRadiusBox.value);
+};
+
+// mass
+planetMass.oninput = () => {
+  planetMassBox.value = planetMass.value;
+  planetList.getCurrent().mass = parseFloat(planetMass.value);
+};
+planetMassBox.oninput = () => {
+  planetMass.value = planetMassBox.value;
+  planetList.getCurrent().mass = parseFloat(planetMassBox.value);
+};
+
+// velocity
+planetVelocity.oninput = () => {
+  planetVelocityBox.value = planetVelocity.value;
+  planetList.getCurrent().velocity = parseFloat(planetVelocity.value);
+};
+planetVelocityBox.oninput = () => {
+  planetVelocity.value = planetVelocityBox.value;
+  planetList.getCurrent().velocity = parseFloat(planetVelocityBox.value);
+};
+
+// distance
+planetDistance.oninput = () => {
+  planetDistanceBox.value = planetDistance.value;
+  planetList.getCurrent().distance = parseFloat(planetDistance.value);
+};
+planetDistanceBox.oninput = () => {
+  planetDistance.value = planetDistanceBox.value;
+  planetList.getCurrent().distance = parseFloat(planetDistanceBox.value);
+};
+
+
+/* ================================================================
+   Load Initial Planet
+================================================================ */
+
+loadPlanetIntoUI();
+
+</script>
+</body>
+</html>
