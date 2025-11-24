@@ -2,84 +2,225 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Solar System – Commit 2</title>
+<title>Solar System – Commit 3</title>
 <style>
   body {
+    margin: 0;
+    padding: 0;
     font-family: system-ui, sans-serif;
-    padding: 20px;
     background: #10141d;
     color: #e5e9f0;
   }
+
+  #layout {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+    max-width: 100vw;
+}
+
+  /* Left side: canvases stacked */
+  #canvasContainer {
+    position: relative;
+    flex: 1;
+  }
+
+  canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  /* Right side: controls */
+  #controls {
+    width: 360px;
+    min-width: 360px;
+    padding: 20px;
+    overflow-y: auto;
+    background: #141821;
+    border-left: 1px solid #222;
+  }
+
   h3 { margin-bottom: 6px; }
   label { display: block; margin: 8px 0; }
   input[type="range"] { width: 160px; }
+
   #planet-nav button {
-    margin-right: 4px; padding: 4px 10px;
+    margin-right: 4px;
+    padding: 4px 10px;
   }
 </style>
 </head>
 <body>
 
-<!-- ==================== SIMULATION CONTROLS ==================== -->
-<h3>— SIMULATION —</h3>
-<label>Speed:
-  <input id="speedSlider" type="range" min="1" max="10" value="5">
-  <input id="speedBox" type="number" min="1" max="10" value="5">
-  <button id="speedReset">Reset</button>
-</label>
-
-<label>Zoom:
-  <input id="zoomSlider" type="range" min="1" max="6" value="3">
-  <input id="zoomBox" type="number" min="1" max="6" value="3">
-  <button id="zoomReset">Reset</button>
-</label>
+<div id="layout">
 
 
-<!-- ==================== PLANET CONTROLS ==================== -->
-<h3>— PLANET —</h3>
+  <!-- ==================== LEFT SIDE CANVASES ==================== -->
+  <div id="canvasContainer">
+    <canvas id="starCanvas"></canvas>
+    <canvas id="simCanvas"></canvas>
+  </div>
 
-<label>Name:
-  <input id="planetName" type="text">
-</label>
+  <!-- ==================== RIGHT SIDE CONTROLS ==================== -->
+  <div id="controls">
 
-<label>Color:
-  <input id="planetColor" type="color" value="#00aaff">
-</label>
+    <!-- ==================== SIMULATION CONTROLS ==================== -->
+    <h3>— SIMULATION —</h3>
+    <label>Speed:
+      <input id="speedSlider" type="range" min="1" max="10" value="5">
+      <input id="speedBox" type="number" min="1" max="10" value="5">
+      <button id="speedReset">Reset</button>
+    </label>
 
-<label>Radius:
-  <input id="planetRadius" type="range" min="0.1" max="5" step="0.1" value="1">
-  <input id="planetRadiusBox" type="number" min="0.1" max="5" step="0.1" value="1">
-  <button id="radiusReset">Reset</button>
-</label>
+    <label>Zoom:
+      <input id="zoomSlider" type="range" min="1" max="6" value="3">
+      <input id="zoomBox" type="number" min="1" max="6" value="3">
+      <button id="zoomReset">Reset</button>
+    </label>
 
-<label>Mass:
-  <input id="planetMass" type="range" min="0.1" max="10" step="0.1" value="1">
-  <input id="planetMassBox" type="number" min="0.1" max="10" step="0.1" value="1">
-  <button id="massReset">Reset</button>
-</label>
-
-<label>Velocity:
-  <input id="planetVelocity" type="range" min="0" max="3" step="0.1" value="1">
-  <input id="planetVelocityBox" type="number" min="0" max="3" step="0.1" value="1">
-  <button id="velocityReset">Reset</button>
-</label>
-
-<label>Distance:
-  <input id="planetDistance" type="range" min="0.2" max="10" step="0.2" value="1">
-  <input id="planetDistanceBox" type="number" min="0.2" max="10" step="0.2" value="1">
-  <button id="distanceReset">Reset</button>
-</label>
+    <button id="pauseBtn" style="margin-top:10px;">Pause</button>
 
 
-<!-- ==================== PLANET NAVIGATION ==================== -->
-<div id="planet-nav" style="margin-top: 10px;">
-  <button id="prevBtn">Prev</button>
-  <button id="addBtn">Add</button>
-  <button id="delBtn">Del</button>
-  <button id="nextBtn">Next</button>
-</div>
+    <!-- ==================== PLANET CONTROLS ==================== -->
+    <h3>— PLANET —</h3>
+
+    <label>Name:
+      <input id="planetName" type="text">
+    </label>
+
+    <label>Color:
+      <input id="planetColor" type="color" value="#00aaff">
+    </label>
+
+    <label>Radius:
+      <input id="planetRadius" type="range" min="0.1" max="5" step="0.1" value="1">
+      <input id="planetRadiusBox" type="number" min="0.1" max="5" step="0.1" value="1">
+      <button id="radiusReset">Reset</button>
+    </label>
+
+    <label>Mass:
+      <input id="planetMass" type="range" min="0.1" max="10" step="0.1" value="1">
+      <input id="planetMassBox" type="number" min="0.1" max="10" step="0.1" value="1">
+      <button id="massReset">Reset</button>
+    </label>
+
+    <label>Velocity:
+      <input id="planetVelocity" type="range" min="0" max="3" step="0.1" value="1">
+      <input id="planetVelocityBox" type="number" min="0" max="3" step="0.1" value="1">
+      <button id="velocityReset">Reset</button>
+    </label>
+
+    <label>Distance:
+      <input id="planetDistance" type="range" min="0.2" max="10" step="0.2" value="1">
+      <input id="planetDistanceBox" type="number" min="0.2" max="10" step="0.2" value="1">
+      <button id="distanceReset">Reset</button>
+    </label>
+
+
+    <!-- ==================== PLANET NAVIGATION ==================== -->
+    <div id="planet-nav" style="margin-top: 10px;">
+      <button id="prevBtn">Prev</button>
+      <button id="addBtn">Add</button>
+      <button id="delBtn">Del</button>
+      <button id="nextBtn">Next</button>
+    </div>
+
+  </div> <!-- end controls -->
+
+</div> <!-- end layout -->
+
 
 <script>
+/*  ============================================================
+    STARFIELD — Twinkling, resizes without losing star positions
+    ============================================================ */
+
+const starCanvas = document.getElementById("starCanvas");
+const starCtx = starCanvas.getContext("2d");
+
+let stars = [];
+const STAR_COUNT = 300;
+
+function resizeCanvases() {
+  const container = document.getElementById("canvasContainer");
+  const w = container.clientWidth;
+  const h = container.clientHeight;
+
+  // Get old width/height before resizing
+  const oldW = starCanvas.width;
+  const oldH = starCanvas.height;
+
+  // Resize the canvases
+  starCanvas.width = w;
+  starCanvas.height = h;
+
+  const simCanvas = document.getElementById("simCanvas");
+  simCanvas.width = w;
+  simCanvas.height = h;
+
+  // If stars already exist, re-map them to new size
+  if (stars.length > 0) {
+    for (let s of stars) {
+      s.x = s.px * w;
+      s.y = s.py * h;
+    }
+  } else {
+    generateStars();
+  }
+}
+
+function generateStars() {
+  stars = [];
+  const w = starCanvas.width;
+  const h = starCanvas.height;
+
+  for (let i = 0; i < STAR_COUNT; i++) {
+    const x = Math.random() * w;
+    const y = Math.random() * h;
+
+    stars.push({
+      // Store the actual pixel position
+      x,
+      y,
+
+      // AND the position as a percentage for resize stability
+      px: x / w,
+      py: y / h,
+
+      r: Math.random() * 1.8 + 0.4,
+      twinkle: Math.random() * 0.05 + 0.01
+    });
+  }
+}
+
+function drawStars() {
+  const w = starCanvas.width;
+  const h = starCanvas.height;
+
+  starCtx.clearRect(0, 0, w, h);
+
+  for (let s of stars) {
+    // Twinkle
+    s.r += (Math.random() - 0.5) * s.twinkle;
+    if (s.r < 0.3) s.r = 0.3;
+    if (s.r > 2.5) s.r = 2.5;
+
+    // Draw star
+    starCtx.beginPath();
+    starCtx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    starCtx.fillStyle = "white";
+    starCtx.fill();
+  }
+
+  requestAnimationFrame(drawStars);
+}
+
+window.addEventListener("resize", resizeCanvases);
+window.addEventListener("orientationchange", resizeCanvases);
+
+resizeCanvases();
+drawStars();
 
 
 /* ================================================================
@@ -330,6 +471,15 @@ zoomReset.onclick = () => {
   zoomSlider.value = zoomBox.value = 3;
 };
 
+/* ===== PAUSE / PLAY BUTTON ===== */
+let isPaused = false;
+
+const pauseBtn = document.getElementById("pauseBtn");
+pauseBtn.onclick = () => {
+  isPaused = !isPaused;
+  pauseBtn.textContent = isPaused ? "Play" : "Pause";
+};
+
 
 /* ================================================================
    Load Initial Planet
@@ -337,7 +487,7 @@ zoomReset.onclick = () => {
 
 loadPlanetIntoUI();
 
-
 </script>
+
 </body>
 </html>
