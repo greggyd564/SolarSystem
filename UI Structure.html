@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Solar System – Commit 1</title>
+<title>Solar System – Commit 2</title>
 <style>
   body {
     font-family: system-ui, sans-serif;
@@ -79,8 +79,45 @@
   <button id="nextBtn">Next</button>
 </div>
 
-
 <script>
+
+
+/* ================================================================
+   Set Control Variables
+================================================================ */
+
+const speedSlider = document.getElementById("speedSlider");
+const speedBox    = document.getElementById("speedBox");
+const speedReset  = document.getElementById("speedReset");
+
+const zoomSlider = document.getElementById("zoomSlider");
+const zoomBox    = document.getElementById("zoomBox");
+const zoomReset  = document.getElementById("zoomReset");
+
+const planetName        = document.getElementById("planetName");
+const planetColor       = document.getElementById("planetColor");
+const planetRadius      = document.getElementById("planetRadius");
+const planetRadiusBox   = document.getElementById("planetRadiusBox");
+const radiusReset       = document.getElementById("radiusReset");
+
+const planetMass        = document.getElementById("planetMass");
+const planetMassBox     = document.getElementById("planetMassBox");
+const massReset         = document.getElementById("massReset");
+
+const planetVelocity     = document.getElementById("planetVelocity");
+const planetVelocityBox  = document.getElementById("planetVelocityBox");
+const velocityReset      = document.getElementById("velocityReset");
+
+const planetDistance     = document.getElementById("planetDistance");
+const planetDistanceBox  = document.getElementById("planetDistanceBox");
+const distanceReset      = document.getElementById("distanceReset");
+
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+const addBtn  = document.getElementById("addBtn");
+const delBtn  = document.getElementById("delBtn");
+
+
 /* ================================================================
    Planet + PlanetList Data Model
 ================================================================ */
@@ -207,6 +244,18 @@ planetColor.oninput = () => {
   planetList.getCurrent().color = planetColor.value;
 };
 
+
+/* ===== SIMULATION CONTROLS ===== */
+
+speedSlider.oninput = () => { speedBox.value = speedSlider.value; };
+speedBox.oninput    = () => { speedSlider.value = speedBox.value; };
+
+zoomSlider.oninput = () => { zoomBox.value = zoomSlider.value; };
+zoomBox.oninput    = () => { zoomSlider.value = zoomBox.value; };
+
+
+/* ===== PLANET PARAMETER CONTROLS ===== */
+
 // radius
 planetRadius.oninput = () => {
   planetRadiusBox.value = planetRadius.value;
@@ -248,11 +297,46 @@ planetDistanceBox.oninput = () => {
 };
 
 
+/* ===== PLANET RESET BUTTONS ===== */
+
+radiusReset.onclick = () => {
+  planetRadius.value = planetRadiusBox.value = 1;
+  planetList.getCurrent().radius = 1;
+};
+
+massReset.onclick = () => {
+  planetMass.value = planetMassBox.value = 1;
+  planetList.getCurrent().mass = 1;
+};
+
+velocityReset.onclick = () => {
+  planetVelocity.value = planetVelocityBox.value = 1;
+  planetList.getCurrent().velocity = 1;
+};
+
+distanceReset.onclick = () => {
+  planetDistance.value = planetDistanceBox.value = 1;
+  planetList.getCurrent().distance = 1;
+};
+
+
+/* ===== SIMULATION RESET BUTTONS ===== */
+
+speedReset.onclick = () => {
+  speedSlider.value = speedBox.value = 5;
+};
+
+zoomReset.onclick = () => {
+  zoomSlider.value = zoomBox.value = 3;
+};
+
+
 /* ================================================================
    Load Initial Planet
 ================================================================ */
 
 loadPlanetIntoUI();
+
 
 </script>
 </body>
