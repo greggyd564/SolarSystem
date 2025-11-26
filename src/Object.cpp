@@ -9,7 +9,7 @@ Object::Object(double mass, int type, double veloX, double veloY, double veloZ, 
 }
 
 // Getter for location
-pos Object::getLocation() {
+pos Object::getLocation() const{
     return location;
 }
 
@@ -24,7 +24,7 @@ pos Object::getVelocity() {
 }
 
 // Getter for type
-int Object::getType() {
+int Object::getType() const{
     return type;
 }
 

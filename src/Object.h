@@ -13,8 +13,8 @@ public:
     // Getters
     double getMass();
     pos getVelocity(); 
-    pos getLocation();
-    int getType();
+    pos getLocation() const;
+    int getType() const;
 
     // Setters
     void setMass(double newMass);

@@ -13,11 +13,18 @@ double computeAcceleration(double F, double m);
 double distanceBetweenTwoObjects(double x1, double y1, double x2, double y2, double z1, double z2);
 sf::Vector3f computeForce(Object objectOne, Object objectTwo);
 
-std::vector<sf::CircleShape> convertBodies(std::vector<Object> bodies);
+std::vector<sf::CircleShape> convertBodies(const std::vector<Object>& bodies);
 
 
 double G = 10; // For testing
 double dt = 0.25; // DeltaTime (Change in time) -- increase to make sim go faster , but too much causes it to break (math stuff)
+
+const float SCREEN_WIDTH  = 1100.0f;
+const float SCREEN_HEIGHT = 600.0f;
+
+const float screenCenterX = SCREEN_WIDTH  / 2.0f; // 550
+const float screenCenterY = SCREEN_HEIGHT / 2.0f; // 300
+
 
 int main()
 {
@@ -100,27 +107,27 @@ int main()
 
     // First object - Sun
     double sMass = 1.0; // Mass
-    double sX = 385.0; // X Coordinate
-    double sY = 300.0; // Y Coordinate
-    double sZ = 300.0; // Z Coordinate
+    double sX = 0; // X Coordinate
+    double sY = 0; // Y Coordinate
+    double sZ = 0; // Z Coordinate
 
     // Second object - Planet A
     double pMass = 0.000003003; // Mass
     double pVeloX = 0.0; // Velocity X Coord
     double pVeloY = 0.223; // Velocity y Coord
-    double pVeloZ = 0.225; // Velocity Z Coord
+    double pVeloZ = 0; // Velocity Z Coord
     double pX = 200.0; // X Coordinate
     double pY = 300.0; // Y Coordinate
-    double pZ = 300.0;
+    double pZ = 0;
 
     // Third Object - Planet B
     double pMass1 = 0.000003003; // Mass
     double pVeloX1 = 0.0; // Velocity X Coord
     double pVeloY1 = 0.223; // Velocity y Coord
-    double pVeloZ1 = 0.225;
+    double pVeloZ1 = 0;
     double pX1 = 200.0; // X Coordinate
     double pY1 = 200.0; // Y Coordinate
-    double pZ1 = 0.225; // Z Coordinate
+    double pZ1 = 0; // Z Coordinate
 
     // Initialize as many objects as you want! ( N Body System )
     Object sun(sMass, 0, 0, 0, 0, sX, sY, sZ);
@@ -309,22 +316,42 @@ sf::Vector3f computeForce(Object objectOne, Object objectTwo) {
 
 
 // Makes vector of planet graphics objects
-std::vector<sf::CircleShape> convertBodies(std::vector<Object> bodies) {
-    std::vector<sf::CircleShape> graphicsBodies = {};
-    for (Object body : bodies) {
+std::vector<sf::CircleShape> convertBodies(const std::vector<Object>& bodies)
+{
+    std::vector<sf::CircleShape> graphicsBodies;
+
+    for (const Object& body : bodies)
+    {
         sf::CircleShape graphicsBody;
-        int bodyType = body.getType(); // type: 0 = sun, 1 = planet
-        if (bodyType == 0) {
+
+        // size + color
+        if (body.getType() == 0) {
             graphicsBody.setRadius(20);
             graphicsBody.setFillColor(sf::Color::Yellow);
         }
-        else if (bodyType == 1) {
+        else {
             graphicsBody.setRadius(10);
             graphicsBody.setFillColor(sf::Color::Green);
         }
+
+        // Get 3D position
         pos bodyLoc = body.getLocation();
-        graphicsBody.setPosition({ (float)bodyLoc.x,(float)bodyLoc.y });
+        float x = bodyLoc.x;
+        float y = bodyLoc.y;
+        float z = bodyLoc.z;
+
+        // Perspective projection
+        float depthScale = 300.0f / (z + 300.0f);  // adjust if needed
+
+        float screenX = screenCenterX + x * depthScale;
+        float screenY = screenCenterY + y * depthScale;
+
+        graphicsBody.setPosition({screenX, screenY});
+
         graphicsBodies.push_back(graphicsBody);
     }
+
     return graphicsBodies;
 }
+
+
