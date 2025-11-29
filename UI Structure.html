@@ -7,7 +7,7 @@
   body {
     margin: 0;
     padding: 0;
-    font-family: system-ui, sans-serif;
+    font-family: 'Courier New', Courier;
     background: #10141d;
     color: #e5e9f0;
   }
@@ -33,8 +33,8 @@
 
   /* Right side: controls */
   #controls {
-    width: 360px;
-    min-width: 360px;
+    width: 400px;
+    min-width: 400px;
     padding: 20px;
     overflow-y: auto;
     background: #141821;
@@ -42,13 +42,87 @@
   }
 
   h3 { margin-bottom: 6px; }
-  label { display: block; margin: 8px 0; }
-  input[type="range"] { width: 160px; }
+
+  /* --- NEW SLIDER LAYOUT FIX --- */
+  label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    justify-content: space-between;
+    margin: 8px 0;
+  }
+
+  label span {
+    width: 100px;  
+    text-align: right;
+    padding-right: 6px;
+  }
+
+  input[type="number"] {
+    width: 70px !important;
+    min-width: 70px !important;
+    max-width: 70px !important;
+    text-align: right;  /* optional, but looks tidy */
+  }
+
+  /* Make name + color inputs expand across the row */
+  label input[type="text"],
+  label input[type="color"] {
+    flex-grow: 1;
+    max-width: none;     /* override previous width rules */
+  }
+
+
+  input[type="range"] {
+    width: 140px;
+  }
 
   #planet-nav button {
     margin-right: 4px;
     padding: 4px 10px;
   }
+
+  /* ===== Collision Modal ===== */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modalContent {
+  background: #141821;
+  color: #e5e9f0;
+  border: 1px solid #444;
+  padding: 20px 30px;
+  border-radius: 8px;
+  box-shadow: 0 0 25px rgba(0,0,0,0.8);
+  max-width: 280px;
+  text-align: center;
+}
+
+.modalContent button {
+  margin-top: 12px;
+  padding: 6px 20px;
+  background: #2d3748;
+  border: 1px solid #555;
+  border-radius: 4px;
+  color: #e5e9f0;
+  cursor: pointer;
+}
+
+.modalContent button:hover {
+  background: #3b465a;
+}
+
 </style>
 </head>
 <body>
@@ -64,71 +138,87 @@
   <!-- ==================== RIGHT SIDE CONTROLS ==================== -->
   <div id="controls">
 
-    <!-- ==================== SIMULATION CONTROLS ==================== -->
-    <h3>— SIMULATION —</h3>
-    <label>Speed:
-      <input id="speedSlider" type="range" min="1" max="10" value="5">
-      <input id="speedBox" type="number" min="1" max="10" value="5">
-      <button id="speedReset">Reset</button>
-    </label>
+  <h3>— SIMULATION —</h3>
 
-    <label>Zoom:
-      <input id="zoomSlider" type="range" min="1" max="5" value="3">
-      <input id="zoomBox" type="number" min="1" max="5" value="3">
-      <button id="zoomReset">Reset</button>
-    </label>
+  <label>
+    <span>Speed:</span>
+    <input id="speedSlider" type="range" min="1" max="10" value="5">
+    <input id="speedBox" type="number" min="1" max="10" value="5">
+    <button id="speedReset">Reset</button>
+  </label>
 
-    <button id="pauseBtn" style="margin-top:10px;">Pause</button>
+  <label>
+    <span>Zoom:</span>
+    <input id="zoomSlider" type="range" min="1" max="5" value="3">
+    <input id="zoomBox" type="number" min="1" max="5" value="3">
+    <button id="zoomReset">Reset</button>
+  </label>
 
-    <!-- ==================== PLANET CONTROLS ==================== -->
-    <h3>— PLANET —</h3>
+  <button id="pauseBtn" style="margin-top:10px;">Pause</button>
 
-    <label>Name:
-      <input id="planetName" type="text">
-    </label>
+  <h3>— PLANET —</h3>
 
-    <label>Color:
-      <input id="planetColor" type="color" value="#00aaff">
-    </label>
+  <label>
+    <span>Name:</span>
+    <input id="planetName" type="text">
+  </label>
 
-    <label>Radius:
-      <input id="planetRadius" type="range" min="0.1" max="5" step="0.1" value="1">
-      <input id="planetRadiusBox" type="number" min="0.1" max="5" step="0.1" value="1">
-      <button id="radiusReset">Reset</button>
-    </label>
+  <label>
+    <span>Color:</span>
+    <input id="planetColor" type="color" value="#00aaff">
+  </label>
 
-    <label>Mass:
-      <input id="planetMass" type="range" min="0.1" max="10" step="0.1" value="1">
-      <input id="planetMassBox" type="number" min="0.1" max="10" step="0.1" value="1">
-      <button id="massReset">Reset</button>
-    </label>
+  <label>
+    <span>Radius:</span>
+    <input id="planetRadius" type="range" min="0.1" max="5" step="0.1" value="1">
+    <input id="planetRadiusBox" type="number" min="0.1" max="5" step="0.1" value="1">
+    <button id="radiusReset">Reset</button>
+  </label>
 
-    <label>Velocity:
-      <input id="planetVelocity" type="range" min="0" max="3" step="0.1" value="1">
-      <input id="planetVelocityBox" type="number" min="0" max="3" step="0.1" value="1">
-      <button id="velocityReset">Reset</button>
-    </label>
+  <label>
+    <span>Mass:</span>
+    <input id="planetMass" type="range" min="0.1" max="10" step="0.1" value="1">
+    <input id="planetMassBox" type="number" min="0.1" max="10" step="0.1" value="1">
+    <button id="massReset">Reset</button>
+  </label>
 
-    <label>Distance:
-      <input id="planetDistance" type="range" min="0.1" max="10" step="0.1" value="1">
-      <input id="planetDistanceBox" type="number" min="0.1" max="10" step="0.1" value="1">
-      <button id="distanceReset">Reset</button>
-    </label>
+  <label>
+    <span>Velocity:</span>
+    <input id="planetVelocity" type="range" min="0" max="3" step="0.1" value="1">
+    <input id="planetVelocityBox" type="number" min="0" max="3" step="0.1" value="1">
+    <button id="velocityReset">Reset</button>
+  </label>
 
-    <!-- ==================== PLANET NAVIGATION ==================== -->
-    <div id="planet-nav" style="margin-top: 10px;">
-      <button id="prevBtn">Prev</button>
-      <button id="addBtn">Add</button>
-      <button id="delBtn">Del</button>
-      <button id="nextBtn">Next</button>
-    </div>
+  <label>
+    <span>Distance:</span>
+    <input id="planetDistance" type="range" min="0.1" max="10" step="0.1" value="1">
+    <input id="planetDistanceBox" type="number" min="0.1" max="10" step="0.1" value="1">
+    <button id="distanceReset">Reset</button>
+  </label>
 
-  </div> <!-- end controls -->
+  <div id="planet-nav">
+  <button id="addBtn">Add</button>
+  <button id="delBtn">Del</button>
+  <span style="display:inline-block; width: 20px;"></span> <!-- Separate element management and navigation-->
+  <button id="prevBtn">Prev</button>
+  <button id="nextBtn">Next</button>
+  </div>
+
+</div>
 
 </div> <!-- end layout -->
 
 
+<!-- COLLISION POPUP -->
+<div id="collisionModal" class="modal hidden">
+  <div class="modalContent">
+    <p id="collisionMessage"></p>
+    <button id="collisionOkBtn">Okay!</button>
+  </div>
+</div>
+
 <script>
+
 /*  ============================================================
     STARFIELD — Twinkling, resizes without losing star positions
     ============================================================ */
@@ -246,10 +336,38 @@ const nextBtn = document.getElementById("nextBtn");
 const addBtn  = document.getElementById("addBtn");
 const delBtn  = document.getElementById("delBtn");
 
+const collisionModal = document.getElementById("collisionModal");
+const collisionMessage = document.getElementById("collisionMessage");
+const collisionOkBtn = document.getElementById("collisionOkBtn");
+
+/* ================================================================
+   Show Pop-up Window if Planets Collide
+================================================================ */
+
+
+function showCollisionPopup(aName, bName) {
+  // Set the message text
+  collisionMessage.textContent =
+    `${aName} collided with ${bName}. Adjust orbital path to resume simulation.`;
+
+  // Show the modal
+  collisionModal.classList.remove("hidden");
+
+  // Pause the simulation + update button label
+  isPaused = true;
+  pauseBtn.textContent = "Play";
+}
+
 
 /* ================================================================
    Planet + PlanetList Data Model
 ================================================================ */
+
+function randomColor() {
+  return "#" + Math.floor(0x80 + Math.random() * 0x7F).toString(16)
+             + Math.floor(0x80 + Math.random() * 0x7F).toString(16)
+             + Math.floor(0x80 + Math.random() * 0x7F).toString(16);
+}
 
 class Planet {
   constructor(name, color, radius, mass, velocity, distance) {
@@ -278,20 +396,25 @@ class PlanetList {
   }
 
   addPlanet() {
-    const baseName = "Earth";
-    let count = 1;
-    let finalName = baseName;
+  const baseName = "Earth";
+  let count = 1;
+  let finalName = baseName;
 
-    while (this.planets.some(p => p.name === finalName)) {
-      count++;
-      finalName = `${baseName} ${count}`;
-    }
-
-    const newPlanet = new Planet(finalName, "#00aaff", 1, 1, 1, 1);
-    this.planets.push(newPlanet);
-    this.currentIndex = this.planets.length - 1;
-    return newPlanet;
+  while (this.planets.some(p => p.name === finalName)) {
+    count++;
+    finalName = `${baseName} ${count}`;
   }
+
+  // First planet keeps your beloved light blue
+  const color = this.planets.length === 0 
+    ? "#00aaff"         // default Earth color
+    : randomColor();    // every other planet is random
+
+  const newPlanet = new Planet(finalName, color, 1, 1, 1, 1);
+  this.planets.push(newPlanet);
+  this.currentIndex = this.planets.length - 1;
+  return newPlanet;
+}
 
   deleteCurrent() {
     if (this.planets.length <= 1) return;
@@ -489,6 +612,12 @@ pauseBtn.onclick = () => {
 };
 
 
+collisionOkBtn.onclick = () => {
+  collisionModal.classList.add("hidden");
+  // Simulation stays paused until user hits Play
+};
+
+
 /* ================================================================
    Simple single-body physics + rendering
 ================================================================ */
@@ -574,12 +703,9 @@ function checkCollisions() {
       const rB = b.radius * RADIUS_SCALE;
 
       if (dist <= COLLISION_THRESHOLD * (rA + rB)) {
-        console.log("Collision:", a.name, "and", b.name);
-        isPaused = true;
-        pauseBtn.textContent = "Play";
+        showCollisionPopup(a.name, b.name);
         return true;
       }
-
     }
   }
 
@@ -593,9 +719,7 @@ function checkCollisions() {
     const rS = SUN_RADIUS;   // fixed world-unit radius
 
     if (dist <= COLLISION_THRESHOLD * (rP + rS)) {
-      console.log("Collision:", p.name, "and the Sun");
-      isPaused = true;
-      pauseBtn.textContent = "Play";
+      showCollisionPopup(p.name, "the Sun");
       return true;
     }
   }
@@ -632,6 +756,9 @@ function renderScene() {
   simCtx.fill();
 
   // Orbits + planets
+  
+  const active = planetList.getCurrent();
+
   for (const p of planetList.planets) {
     const sx = cx + p.x * scale;
     const sy = cy + p.y * scale;
@@ -658,6 +785,17 @@ function renderScene() {
     simCtx.beginPath();
     simCtx.arc(sx, sy, planetRadiusPx, 0, Math.PI * 2);
     simCtx.fill();
+    // --- Active Planet Highlight Ring ---
+    if (p === active) {
+      simCtx.save();
+      simCtx.strokeStyle = "rgba(255,255,255,0.9)";  // strong white
+      simCtx.lineWidth = 1 * zoom;                   // scale with zoom
+      simCtx.beginPath();
+      simCtx.arc(sx, sy, planetRadiusPx + 4, 0, Math.PI * 2);
+      simCtx.stroke();
+      simCtx.restore();
+    }
+
   }
 }
 
