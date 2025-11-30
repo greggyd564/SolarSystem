@@ -43,7 +43,7 @@
 
   h3 { margin-bottom: 6px; }
 
-  /* --- NEW SLIDER LAYOUT FIX --- */
+  /* --- SLIDER LAYOUT --- */
   label {
     display: flex;
     align-items: center;
@@ -63,16 +63,15 @@
     width: 70px !important;
     min-width: 70px !important;
     max-width: 70px !important;
-    text-align: right;  /* optional, but looks tidy */
+    text-align: right;
   }
 
   /* Make name + color inputs expand across the row */
   label input[type="text"],
   label input[type="color"] {
     flex-grow: 1;
-    max-width: none;     /* override previous width rules */
+    max-width: none;
   }
-
 
   input[type="range"] {
     width: 140px;
@@ -91,44 +90,44 @@
   }
 
   /* ===== Collision Modal ===== */
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.55);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-}
+  .modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
 
-.modal.hidden {
-  display: none;
-}
+  .modal.hidden {
+    display: none;
+  }
 
-.modalContent {
-  background: #141821;
-  color: #e5e9f0;
-  border: 1px solid #444;
-  padding: 20px 30px;
-  border-radius: 8px;
-  box-shadow: 0 0 25px rgba(0,0,0,0.8);
-  max-width: 280px;
-  text-align: center;
-}
+  .modalContent {
+    background: #141821;
+    color: #e5e9f0;
+    border: 1px solid #444;
+    padding: 20px 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 25px rgba(0,0,0,0.8);
+    max-width: 280px;
+    text-align: center;
+  }
 
-.modalContent button {
-  margin-top: 12px;
-  padding: 6px 20px;
-  background: #2d3748;
-  border: 1px solid #555;
-  border-radius: 4px;
-  color: #e5e9f0;
-  cursor: pointer;
-}
+  .modalContent button {
+    margin-top: 12px;
+    padding: 6px 20px;
+    background: #2d3748;
+    border: 1px solid #555;
+    border-radius: 4px;
+    color: #e5e9f0;
+    cursor: pointer;
+  }
 
-.modalContent button:hover {
-  background: #3b465a;
-}
+  .modalContent button:hover {
+    background: #3b465a;
+  }
 
 </style>
 </head>
@@ -145,81 +144,102 @@
   <!-- ==================== RIGHT SIDE CONTROLS ==================== -->
   <div id="controls">
 
-  <h3>— SIMULATION —</h3>
+    <h3>— SIMULATION —</h3>
 
-  <label>
-    <span>Speed:</span>
-    <input id="speedSlider" type="range" min="1" max="10" value="3">
-    <input id="speedBox" type="number" min="1" max="10" value="3">
-    <button id="speedReset">Reset</button>
-  </label>
+    <label>
+      <span>Speed:</span>
+      <input id="speedSlider" type="range" min="1" max="10" value="3">
+      <input id="speedBox" type="number" min="1" max="10" value="3">
+      <button id="speedReset">Reset</button>
+    </label>
 
-  <label>
-    <span>Zoom:</span>
-    <input id="zoomSlider" type="range" min="1" max="5" value="3">
-    <input id="zoomBox" type="number" min="1" max="5" value="3">
-    <button id="zoomReset">Reset</button>
-  </label>
+    <label>
+      <span>Zoom:</span>
+      <input id="zoomSlider" type="range" min="1" max="5" value="3">
+      <input id="zoomBox" type="number" min="1" max="5" value="3">
+      <button id="zoomReset">Reset</button>
+    </label>
 
-  <button id="pauseBtn" style="margin-top:10px;">Pause</button>
+    <button id="pauseBtn" style="margin-top:10px; width:100%;">Pause</button>
 
-  <button id="resetSimBtn" style="margin:10px 0; width:100%;">Reset Simulation</button>
+    <button id="resetSimBtn" style="margin:10px 0; width:100%;">** RESET SIMULATION **</button>
 
-  <h3>— PLANET —</h3>
+    <h3>— PLANET —</h3>
 
-  <label>
-    <span>Name:</span>
-    <input id="planetName" type="text">
-  </label>
+    <label>
+      <span>Name:</span>
+      <input id="planetName" type="text">
+    </label>
 
-  <label>
-    <span>Color:</span>
-    <input id="planetColor" type="color" value="#00aaff">
-  </label>
+    <label>
+      <span>Color:</span>
+      <input id="planetColor" type="color" value="#00aaff">
+    </label>
 
-  <label>
-    <span>Radius:</span>
-    <input id="planetRadius" type="range" min="0.1" max="5" step="0.1" value="1">
-    <input id="planetRadiusBox" type="number" min="0.1" max="5" step="0.1" value="1">
-    <button id="radiusReset">Reset</button>
-  </label>
+    <label>
+      <span>Radius:</span>
+      <input id="planetRadius" type="range" min="0.1" max="5" step="0.1" value="1">
+      <input id="planetRadiusBox" type="number" min="0.1" max="5" step="0.1" value="1">
+      <button id="radiusReset">Reset</button>
+    </label>
 
-  <label>
-    <span>Mass:</span>
-    <input id="planetMass" type="range" min="0.1" max="10" step="0.1" value="1">
-    <input id="planetMassBox" type="number" min="0.1" max="10" step="0.1" value="1">
-    <button id="massReset">Reset</button>
-  </label>
+    <label>
+      <span>Mass:</span>
+      <input id="planetMass" type="range" min="0.1" max="10" step="0.1" value="1">
+      <input id="planetMassBox" type="number" min="0.1" max="10" step="0.1" value="1">
+      <button id="massReset">Reset</button>
+    </label>
 
-  <label>
-    <span>Velocity:</span>
-    <input id="planetVelocity" type="range" min="0" max="3" step="0.1" value="1">
-    <input id="planetVelocityBox" type="number" min="0" max="3" step="0.1" value="1">
-    <button id="velocityReset">Reset</button>
-  </label>
+    <label>
+      <span>Velocity:</span>
+      <input id="planetVelocity" type="range" min="0" max="3" step="0.1" value="1">
+      <input id="planetVelocityBox" type="number" min="0" max="3" step="0.1" value="1">
+      <button id="velocityReset">Reset</button>
+    </label>
 
-  <label>
-    <span>Distance:</span>
-    <input id="planetDistance" type="range" min="0.1" max="10" step="0.1" value="1">
-    <input id="planetDistanceBox" type="number" min="0.1" max="10" step="0.1" value="1">
-    <button id="distanceReset">Reset</button>
-  </label>
+    <label>
+      <span>Distance:</span>
+      <input id="planetDistance" type="range" min="0.1" max="10" step="0.1" value="1">
+      <input id="planetDistanceBox" type="number" min="0.1" max="10" step="0.1" value="1">
+      <button id="distanceReset">Reset</button>
+    </label>
 
-  <div class="legend">
-    Radius, Mass, Velocity, and Distance<br>
-    are relative to Earth units.
+    <label>
+      <span>Angle:</span>
+      <input id="planetAngle" type="range" min="0" max="360" step="1" value="0" disabled>
+      <input id="planetAngleBox" type="number" min="0" max="360" step="1" value="0" disabled>
+      <button id="angleReset"disabled>Reset</button>
+    </label>
+
+    <label>
+      <span>Direction:</span>
+      <div style="display:flex; gap:10px;">
+        <label><input type="radio" name="orbitDir" value="cw" > CW</label>
+        <label><input type="radio" name="orbitDir" value="ccw" checked> CCW</label>
+      </div>
+    </label>
+
+    <div class="legend">
+      Radius, Mass, Velocity, and Distance<br>
+      are relative to Earth units.
+    </div>
+
+    <div id="planet-nav">
+      <button id="addBtn">Add</button>
+      <button id="delBtn">Del</button>
+      <span style="display:inline-block; width: 20px;"></span>
+      <button id="prevBtn">Prev</button>
+      <button id="nextBtn">Next</button>
+    </div>
+
+    <p id="editNotice" style="font-size:1.0rem; color:#f9f8f8;">
+    *** RECOMMENDED ***<br>
+    Pause the SIMULATION to edit<br>
+    PLANET controls.
+    </p>
+
+
   </div>
-
-
-  <div id="planet-nav">
-  <button id="addBtn">Add</button>
-  <button id="delBtn">Del</button>
-  <span style="display:inline-block; width: 20px;"></span> <!-- Separate element management and navigation-->
-  <button id="prevBtn">Prev</button>
-  <button id="nextBtn">Next</button>
-  </div>
-
-</div>
 
 </div> <!-- end layout -->
 
@@ -233,7 +253,6 @@
 </div>
 
 <script>
-
 /*  ============================================================
     STARFIELD — Twinkling, resizes without losing star positions
     ============================================================ */
@@ -248,9 +267,6 @@ function resizeCanvases() {
   const container = document.getElementById("canvasContainer");
   const w = container.clientWidth;
   const h = container.clientHeight;
-
-  const oldW = starCanvas.width;
-  const oldH = starCanvas.height;
 
   starCanvas.width = w;
   starCanvas.height = h;
@@ -315,20 +331,18 @@ window.addEventListener("orientationchange", resizeCanvases);
 resizeCanvases();
 drawStars();
 
-
 /*  ============================================================
-    *** SIMULATION DEFAULT VALUES ***
+    SIMULATION DEFAULT VALUES
     ============================================================ */
 
 const UI_DEFAULTS = {
-    SPEED: 3,
-    ZOOM: 3,
-    RADIUS: 1,
-    MASS: 1,
-    VELOCITY: 1,
-    DISTANCE: 1,
+  SPEED: 3,
+  ZOOM: 3,
+  RADIUS: 1,
+  MASS: 1,
+  VELOCITY: 1,
+  DISTANCE: 1,
 };
-
 
 /* ================================================================
    Set Control Variables
@@ -341,8 +355,9 @@ const speedReset  = document.getElementById("speedReset");
 const zoomSlider = document.getElementById("zoomSlider");
 const zoomBox    = document.getElementById("zoomBox");
 const zoomReset  = document.getElementById("zoomReset");
-const resetSimBtn = document.getElementById("resetSimBtn").onclick = resetSimulation;
 
+const pauseBtn   = document.getElementById("pauseBtn");
+document.getElementById("resetSimBtn").onclick = resetSimulation;
 
 const planetName        = document.getElementById("planetName");
 const planetColor       = document.getElementById("planetColor");
@@ -354,69 +369,68 @@ const planetMass        = document.getElementById("planetMass");
 const planetMassBox     = document.getElementById("planetMassBox");
 const massReset         = document.getElementById("massReset");
 
-const planetVelocity     = document.getElementById("planetVelocity");
-const planetVelocityBox  = document.getElementById("planetVelocityBox");
-const velocityReset      = document.getElementById("velocityReset");
+const planetVelocity    = document.getElementById("planetVelocity");
+const planetVelocityBox = document.getElementById("planetVelocityBox");
+const velocityReset     = document.getElementById("velocityReset");
 
-const planetDistance     = document.getElementById("planetDistance");
-const planetDistanceBox  = document.getElementById("planetDistanceBox");
-const distanceReset      = document.getElementById("distanceReset");
+const planetDistance    = document.getElementById("planetDistance");
+const planetDistanceBox = document.getElementById("planetDistanceBox");
+const distanceReset     = document.getElementById("distanceReset");
+
+const planetAngle       = document.getElementById("planetAngle");
+const planetAngleBox    = document.getElementById("planetAngleBox");
+const angleReset        = document.getElementById("angleReset");
 
 const prevBtn = document.getElementById("prevBtn");
 const nextBtn = document.getElementById("nextBtn");
 const addBtn  = document.getElementById("addBtn");
 const delBtn  = document.getElementById("delBtn");
 
-const collisionModal = document.getElementById("collisionModal");
+const collisionModal   = document.getElementById("collisionModal");
 const collisionMessage = document.getElementById("collisionMessage");
-const collisionOkBtn = document.getElementById("collisionOkBtn");
+const collisionOkBtn   = document.getElementById("collisionOkBtn");
 
 /* ================================================================
    Show Pop-up Window if Planets Collide
 ================================================================ */
 
-
 function showCollisionPopup(aName, bName) {
-  // Set the message text
   collisionMessage.textContent =
     `${aName} collided with ${bName}. Adjust orbital path to resume simulation.`;
 
-  // Show the modal
   collisionModal.classList.remove("hidden");
-
-  // Pause the simulation + update button label
   isPaused = true;
   pauseBtn.textContent = "Play";
 }
-
 
 /* ================================================================
    Planet + PlanetList Data Model
 ================================================================ */
 
 function randomColor() {
-  return "#" + Math.floor(0x80 + Math.random() * 0x7F).toString(16)
-             + Math.floor(0x80 + Math.random() * 0x7F).toString(16)
-             + Math.floor(0x80 + Math.random() * 0x7F).toString(16);
+  return "#" +
+    Math.floor(0x80 + Math.random() * 0x7F).toString(16).padStart(2, "0") +
+    Math.floor(0x80 + Math.random() * 0x7F).toString(16).padStart(2, "0") +
+    Math.floor(0x80 + Math.random() * 0x7F).toString(16).padStart(2, "0");
 }
 
 class Planet {
-  constructor(name, color, radius, mass, velocity, distance) {
+  constructor(name, color, radius, mass, velocity, distance, angle = 0, direction = "ccw") {
     this.name = name;
     this.color = color;
     this.radius = radius;
     this.mass = mass;
-    this.velocity = velocity;   // UI velocity factor
-    this.distance = distance;   // initial orbital radius
+    this.velocity = velocity;
+    this.distance = distance;
+    this.angle = angle;          // degrees 0–360
+    this.direction = direction;  // "cw" or "ccw"
 
-    // dynamic state for physics
-    this.x = distance;
+    this.x = 0;
     this.y = 0;
     this.vx = 0;
     this.vy = 0;
 
     this.trace = [];
-
   }
 }
 
@@ -427,25 +441,31 @@ class PlanetList {
   }
 
   addPlanet() {
-  const baseName = "Earth";
-  let count = 1;
-  let finalName = baseName;
+    const baseName = "Earth";
+    let count = 1;
+    let finalName = baseName;
 
-  while (this.planets.some(p => p.name === finalName)) {
-    count++;
-    finalName = `${baseName} ${count}`;
+    while (this.planets.some(p => p.name === finalName)) {
+      count++;
+      finalName = `${baseName} ${count}`;
+    }
+
+    const color = this.planets.length === 0 
+      ? "#00aaff"    // default Earth color
+      : randomColor();
+
+    const newPlanet = new Planet(
+      finalName,
+      color,
+      UI_DEFAULTS.RADIUS,
+      UI_DEFAULTS.MASS,
+      UI_DEFAULTS.VELOCITY,
+      this.planets.length + 1  // distance grows per planet
+    );
+    this.planets.push(newPlanet);
+    this.currentIndex = this.planets.length - 1;
+    return newPlanet;
   }
-
-  // First planet keeps your beloved light blue
-  const color = this.planets.length === 0 
-    ? "#00aaff"         // default Earth color
-    : randomColor();    // every other planet is random
-
-  const newPlanet = new Planet(finalName, color, UI_DEFAULTS.RADIUS, UI_DEFAULTS.MASS, UI_DEFAULTS.VELOCITY, this.planets.length + 1);
-  this.planets.push(newPlanet);
-  this.currentIndex = this.planets.length - 1;
-  return newPlanet;
-}
 
   deleteCurrent() {
     if (this.planets.length <= 1) return;
@@ -467,14 +487,12 @@ class PlanetList {
   }
 }
 
-
 /* ================================================================
    Initialize Planet List
 ================================================================ */
 
 const planetList = new PlanetList();
 planetList.addPlanet(); // start with one default Earth
-
 
 /* ================================================================
    UI Loading Helper
@@ -489,10 +507,15 @@ function loadPlanetIntoUI() {
   planetMass.value = planetMassBox.value = p.mass;
   planetVelocity.value = planetVelocityBox.value = p.velocity;
   planetDistance.value = planetDistanceBox.value = p.distance;
+  planetAngle.value = planetAngleBox.value = p.angle || 0;
+
+  // sync direction radios
+  const dir = p.direction || "cw";
+  const dirRadio = document.querySelector(`input[name="orbitDir"][value="${dir}"]`);
+  if (dirRadio) dirRadio.checked = true;
 
   delBtn.disabled = (planetList.planets.length === 1);
 }
-
 
 /* ================================================================
    Navigation Button Hooks
@@ -519,7 +542,6 @@ delBtn.onclick = () => {
   loadPlanetIntoUI();
 };
 
-
 /* ================================================================
    Sync UI Input → Planet Object
 ================================================================ */
@@ -534,7 +556,6 @@ planetColor.oninput = () => {
   planetList.getCurrent().color = planetColor.value;
 };
 
-
 /* ===== SIMULATION CONTROLS ===== */
 
 speedSlider.oninput = () => { speedBox.value = speedSlider.value; };
@@ -542,7 +563,6 @@ speedBox.oninput    = () => { speedSlider.value = speedBox.value; };
 
 zoomSlider.oninput = () => { zoomBox.value = zoomSlider.value; };
 zoomBox.oninput    = () => { zoomSlider.value = zoomBox.value; };
-
 
 /* ===== PLANET PARAMETER CONTROLS ===== */
 
@@ -556,7 +576,7 @@ planetRadiusBox.oninput = () => {
   planetList.getCurrent().radius = parseFloat(planetRadiusBox.value);
 };
 
-// mass (not used in current physics, reserved for later)
+// mass
 planetMass.oninput = () => {
   planetMassBox.value = planetMass.value;
   planetList.getCurrent().mass = parseFloat(planetMass.value);
@@ -566,132 +586,66 @@ planetMassBox.oninput = () => {
   planetList.getCurrent().mass = parseFloat(planetMass.value);
 };
 
-// velocity (factor on circular orbital speed)
+// velocity (adjust speed, preserve direction of motion)
 planetVelocity.oninput = () => {
   planetVelocityBox.value = planetVelocity.value;
   const p = planetList.getCurrent();
   p.velocity = parseFloat(planetVelocity.value);
 
-  // keep current motion direction
   const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy) || 1;
   const dirX = p.vx / speed;
   const dirY = p.vy / speed;
 
-  // compute new target circular-speed-based magnitude
-  const r = Math.sqrt(p.x * p.x + p.y * p.y);
+  const r = Math.sqrt(p.x * p.x + p.y * p.y) || 1;
   const vCirc = Math.sqrt((G * SUN_MASS) / r);
   const newSpeed = vCirc * p.velocity;
 
-  // apply new magnitude, preserve direction
-  p.vx = dirX * newSpeed;
-  p.vy = dirY * newSpeed;
-  };
-planetVelocityBox.oninput = () => {
-  planetVelocity.value = planetVelocityBox.value;
-  const p = planetList.getCurrent();
-  p.velocity = parseFloat(planetVelocity.value);
-
-  // keep current motion direction
-  const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy) || 1;
-  const dirX = p.vx / speed;
-  const dirY = p.vy / speed;
-
-  // compute new target circular-speed-based magnitude
-  const r = Math.sqrt(p.x * p.x + p.y * p.y);
-  const vCirc = Math.sqrt((G * SUN_MASS) / r);
-  const newSpeed = vCirc * p.velocity;
-
-  // apply new magnitude, preserve direction
   p.vx = dirX * newSpeed;
   p.vy = dirY * newSpeed;
 };
+planetVelocityBox.oninput = () => {
+  planetVelocity.value = planetVelocityBox.value;
+  planetVelocity.oninput();
+};
 
-// distance
+// distance (radial, preserve angle)
 planetDistance.oninput = () => {
   const p = planetList.getCurrent();
   const newDist = parseFloat(planetDistance.value);
 
-  // Compute current angle before modifying
-  const angle = Math.atan2(p.y, p.x);
-
-  // Update radial distance, keeping angle constant
+  const angleRad = Math.atan2(-p.y, p.x); // invert back since y is flipped
   p.distance = newDist;
-  p.x = newDist * Math.cos(angle);
-  p.y = newDist * Math.sin(angle);
+  p.x = newDist * Math.cos(angleRad);
+  p.y = -newDist * Math.sin(angleRad);
 
   planetDistanceBox.value = newDist;
 };
-
 planetDistanceBox.oninput = () => {
+  planetDistance.value = planetDistanceBox.value;
+  planetDistance.oninput();
+};
+
+// angle — slider increases CCW
+planetAngle.oninput = () => {
+  planetAngleBox.value = planetAngle.value;
   const p = planetList.getCurrent();
-  const newDist = parseFloat(planetDistanceBox.value);
-
-  const angle = Math.atan2(p.y, p.x);
-
-  p.distance = newDist;
-  p.x = newDist * Math.cos(angle);
-  p.y = newDist * Math.sin(angle);
-
-  planetDistance.value = newDist;
-};
-
-// Clean Simulation Reset -- Lets user start from beginning
-
-function resetSimulation() {
-  // wipe existing planets
-  planetList.planets = [];
-  planetList.currentIndex = 0;
-
-  // add a fresh Earth
-  const earth = planetList.addPlanet();
-  earth.name = "Earth";
-  earth.color = "#00aaff";
-  earth.radius = 1;
-  earth.mass = 1;
-  earth.velocity = 1;
-  earth.distance = 1;
-
-  resetAllOrbits();
-  loadPlanetIntoUI();
-
-  // reset sim-wide UI
-  speedSlider.value = speedBox.value = UI_DEFAULTS.SPEED;
-  zoomSlider.value  = zoomBox.value  = UI_DEFAULTS.ZOOM;
-
-  // Clear traces
-  for (const p of planetList.planets) p.trace = [];
-
-  // Bring back the sun, clear the canvas, etc.
-  isPaused = false;
-  pauseBtn.textContent = "Pause";
-}
-
-/* ===== PLANET RESET BUTTONS ===== */
-
-radiusReset.onclick = () => {
-  planetRadius.value = planetRadiusBox.value = UI_DEFAULTS.RADIUS;
-  planetList.getCurrent().radius = 1;
-};
-
-massReset.onclick = () => {
-  planetMass.value = planetMassBox.value = UI_DEFAULTS.MASS;
-  planetList.getCurrent().mass = 1;
-};
-
-velocityReset.onclick = () => {
-  planetVelocity.value = planetVelocityBox.value = UI_DEFAULTS.VELOCITY;
-  const p = planetList.getCurrent();
-  p.velocity = 1;
+  p.angle = parseFloat(planetAngle.value);
   resetPlanetOrbit(p);
 };
 
-distanceReset.onclick = () => {
-  planetDistance.value = planetDistanceBox.value = UI_DEFAULTS.DISTANCE;
-  const p = planetList.getCurrent();
-  p.distance = 1;
-  resetPlanetOrbit(p);
+planetAngleBox.oninput = () => {
+  planetAngle.value = planetAngleBox.value;
+  planetAngle.oninput();
 };
 
+// direction radios
+document.querySelectorAll("input[name='orbitDir']").forEach(radio => {
+  radio.onchange = () => {
+    const p = planetList.getCurrent();
+    p.direction = radio.value;
+    resetPlanetOrbit(p);
+  };
+});
 
 /* ===== SIMULATION RESET BUTTONS ===== */
 
@@ -703,25 +657,115 @@ zoomReset.onclick = () => {
   zoomSlider.value = zoomBox.value = UI_DEFAULTS.ZOOM;
 };
 
+/* ===== PLANET RESET BUTTONS ===== */
+
+radiusReset.onclick = () => {
+  const p = planetList.getCurrent();
+  p.radius = UI_DEFAULTS.RADIUS;
+  planetRadius.value = planetRadiusBox.value = UI_DEFAULTS.RADIUS;
+};
+
+massReset.onclick = () => {
+  const p = planetList.getCurrent();
+  p.mass = UI_DEFAULTS.MASS;
+  planetMass.value = planetMassBox.value = UI_DEFAULTS.MASS;
+};
+
+velocityReset.onclick = () => {
+  const p = planetList.getCurrent();
+  p.velocity = UI_DEFAULTS.VELOCITY;
+  planetVelocity.value = planetVelocityBox.value = UI_DEFAULTS.VELOCITY;
+  resetPlanetOrbit(p);
+};
+
+distanceReset.onclick = () => {
+  const p = planetList.getCurrent();
+  p.distance = UI_DEFAULTS.DISTANCE;
+  planetDistance.value = planetDistanceBox.value = UI_DEFAULTS.DISTANCE;
+  resetPlanetOrbit(p);
+};
+
+angleReset.onclick = () => {
+  const p = planetList.getCurrent();
+  p.angle = 0;
+  planetAngle.value = planetAngleBox.value = 0;
+  resetPlanetOrbit(p);
+};
+
+function updateUIFromPlanet() {
+  if (isPaused) return; // only update UI when running
+
+  const p = planetList.getCurrent();
+
+  // Position and orbit
+  const r = Math.sqrt(p.x * p.x + p.y * p.y);
+  const angleDeg = (Math.atan2(p.y, p.x) * 180 / Math.PI + 360) % 360;
+
+  planetDistance.value = planetDistanceBox.value = r.toFixed(2);
+  planetAngle.value = planetAngleBox.value = angleDeg.toFixed(1);
+
+// Compute true orbital speed
+const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+
+// Compute circular speed at this distance (Earth = 1.0 multiplier)
+const rad = Math.sqrt(p.x * p.x + p.y * p.y);
+const vCirc = Math.sqrt((G * SUN_MASS) / rad);
+
+// Avoid divide-by-zero
+const multiplier = vCirc > 0 ? speed / vCirc : 1;
+
+// Update UI with Earth-relative multiplier
+planetVelocity.value = planetVelocityBox.value = multiplier.toFixed(2);
+
+  // Mass & radius (won’t change unless physics modifies them later)
+  planetMass.value = planetMassBox.value = p.mass;
+  planetRadius.value = planetRadiusBox.value = p.radius;
+}
+
+
+/* ===== CLEAN SIMULATION RESET ===== */
+
+function resetSimulation() {
+  planetList.planets = [];
+  planetList.currentIndex = 0;
+
+  const earth = planetList.addPlanet();
+  earth.name = "Earth";
+  earth.color = "#00aaff";
+  earth.radius = 1;
+  earth.mass = 1;
+  earth.velocity = 1;
+  earth.distance = 1;
+  earth.angle = 0;
+  earth.direction = "ccw";
+
+  resetAllOrbits();
+  loadPlanetIntoUI();
+
+  speedSlider.value = speedBox.value = UI_DEFAULTS.SPEED;
+  zoomSlider.value  = zoomBox.value  = UI_DEFAULTS.ZOOM;
+
+  for (const p of planetList.planets) p.trace = [];
+
+  isPaused = false;
+  pauseBtn.textContent = "Pause";
+}
 
 /* ===== PAUSE / PLAY BUTTON ===== */
 let isPaused = false;
 
-const pauseBtn = document.getElementById("pauseBtn");
 pauseBtn.onclick = () => {
   isPaused = !isPaused;
   pauseBtn.textContent = isPaused ? "Play" : "Pause";
 };
-
 
 collisionOkBtn.onclick = () => {
   collisionModal.classList.add("hidden");
   // Simulation stays paused until user hits Play
 };
 
-
 /* ================================================================
-   Simple single-body physics + rendering
+   PHYSICS + RENDERING
 ================================================================ */
 
 const simCanvas = document.getElementById("simCanvas");
@@ -732,23 +776,31 @@ const SUN_MASS = 50;
 const G = 1;
 const BASE_DT = 0.001;
 const MAX_DISTANCE = 10;
-const SUN_RADIUS = 0.2;  // world units; scalable if needed
-const RADIUS_SCALE = 0.05;         // world radius = slider radius × scale
-const COLLISION_THRESHOLD = 1.3;   // allow "near miss" collisions
-
+const SUN_RADIUS = 0.2;
+const RADIUS_SCALE = 0.05;
+const COLLISION_THRESHOLD = 1.3;
 
 let simTime = 0;
 
-// Place a planet at (+distance, 0) with tangent velocity vy.
-// velocity slider is a multiplier on circular orbital speed at that radius.
+// === PATCHED resetPlanetOrbit: angle CCW, tangent correct ===
 function resetPlanetOrbit(p) {
   const r = Math.max(p.distance, 0.1);
-  p.x = r;
-  p.y = 0;
 
+  // angle in radians
+  const theta = (p.angle * Math.PI) / 180;
+
+  // position: flip y so angle increases CCW visually
+  p.x = r * Math.cos(theta);
+  p.y = -r * Math.sin(theta);
+
+  // circular speed
   const vCirc = Math.sqrt((G * SUN_MASS) / r);
-  p.vx = 0;
-  p.vy = vCirc * p.velocity;
+
+  // tangent direction: CCW = +90°, CW = -90°
+  const tangent = theta + (p.direction === "ccw" ? -Math.PI / 2 : Math.PI / 2);
+
+  p.vx = vCirc * Math.cos(tangent) * p.velocity;
+  p.vy = vCirc * Math.sin(tangent) * p.velocity;
 
   p.trace = [];
 }
@@ -759,51 +811,44 @@ function resetAllOrbits() {
   }
 }
 
-// Initialize dynamic state for initial planet(s)
+// initialize
 resetAllOrbits();
 
 function stepPhysics(dt) {
   const planets = planetList.planets;
   const n = planets.length;
 
-  // First, compute accelerations from SUN + other planets
+  // update velocities from Sun + planet–planet
   for (let i = 0; i < n; i++) {
     const p = planets[i];
 
-    // Start with acceleration from the Sun at (0, 0)
     const dxSun = p.x;
     const dySun = p.y;
     const r2Sun = dxSun * dxSun + dySun * dySun + 1e-6;
     const rSun  = Math.sqrt(r2Sun);
 
-    // Sun's gravity (stationary, big mass)
     let ax = - (G * SUN_MASS / r2Sun) * (dxSun / rSun);
     let ay = - (G * SUN_MASS / r2Sun) * (dySun / rSun);
 
-    // Add contributions from other planets
     for (let j = 0; j < n; j++) {
       if (j === i) continue;
-
-      const q = planets[j]; // other planet
+      const q = planets[j];
 
       const dx = q.x - p.x;
       const dy = q.y - p.y;
       const r2 = dx * dx + dy * dy + 1e-6;
       const r  = Math.sqrt(r2);
 
-      // Gravitational acceleration due to q on p
-      const aMag = (G * q.mass) / r2;  // note: we divide by p.mass when building a, so here just use q.mass
-
+      const aMag = (G * q.mass) / r2;
       ax += aMag * (dx / r);
       ay += aMag * (dy / r);
     }
 
-    // Update velocity for this planet
     p.vx += ax * dt;
     p.vy += ay * dt;
   }
 
-  // Then, update all positions + traces
+  // update positions + traces
   for (const p of planets) {
     p.x += p.vx * dt;
     p.y += p.vy * dt;
@@ -818,7 +863,7 @@ function stepPhysics(dt) {
 function checkCollisions() {
   const planets = planetList.planets;
 
-  // Planet–planet collisions
+  // planet–planet
   for (let i = 0; i < planets.length; i++) {
     for (let j = i + 1; j < planets.length; j++) {
       const a = planets[i];
@@ -832,22 +877,31 @@ function checkCollisions() {
       const rB = b.radius * RADIUS_SCALE;
 
       if (dist <= COLLISION_THRESHOLD * (rA + rB)) {
+        planetList.currentIndex = i;
+        loadPlanetIntoUI();
         showCollisionPopup(a.name, b.name);
         return true;
       }
     }
   }
 
-  // Planet–Sun collisions
+  // planet–sun
   for (const p of planets) {
     const dx = p.x;
     const dy = p.y;
     const dist = Math.sqrt(dx*dx + dy*dy);
 
     const rP = p.radius * RADIUS_SCALE;
-    const rS = SUN_RADIUS;   // fixed world-unit radius
+    const rS = SUN_RADIUS;
 
     if (dist <= COLLISION_THRESHOLD * (rP + rS)) {
+      for (let k = 0; k < planetList.planets.length; k++) {
+        if (planetList.planets[k] === p) {
+          planetList.currentIndex = k;
+          break;
+        }
+      }
+      loadPlanetIntoUI();
       showCollisionPopup(p.name, "the Sun");
       return true;
     }
@@ -855,7 +909,6 @@ function checkCollisions() {
 
   return false;
 }
-
 
 function renderScene() {
   const w = simCanvas.width;
@@ -870,7 +923,7 @@ function renderScene() {
   const scale = baseScale * zoom;
 
   // Sun
-  const SUN_SCALE_MODIFIER = .0125
+  const SUN_SCALE_MODIFIER = 0.0125;
   const sunRadiusPx = Math.min(w, h) * SUN_SCALE_MODIFIER * zoom;
   const grad = simCtx.createRadialGradient(
     cx, cy, sunRadiusPx * 0.1,
@@ -884,74 +937,61 @@ function renderScene() {
   simCtx.arc(cx, cy, sunRadiusPx, 0, Math.PI * 2);
   simCtx.fill();
 
-  // Orbits + planets
-  
+  // planets + traces
   const active = planetList.getCurrent();
 
   for (const p of planetList.planets) {
     const sx = cx + p.x * scale;
     const sy = cy + p.y * scale;
 
-    const orbitRadiusPx = Math.hypot(
-      cx + p.distance * scale - cx,
-      cy - cy
-    );
-   // Draw actual orbital trace
     simCtx.strokeStyle = p.color + "55";
     simCtx.lineWidth = 1;
     simCtx.beginPath();
     for (let i = 0; i < p.trace.length; i++) {
-    const tx = cx + p.trace[i].x * scale;
-    const ty = cy + p.trace[i].y * scale;
+      const tx = cx + p.trace[i].x * scale;
+      const ty = cy + p.trace[i].y * scale;
       if (i === 0) simCtx.moveTo(tx, ty);
       else simCtx.lineTo(tx, ty);
     }
     simCtx.stroke();
-
 
     const planetRadiusPx = 3 + p.radius * 2.5 * zoom;
     simCtx.fillStyle = p.color;
     simCtx.beginPath();
     simCtx.arc(sx, sy, planetRadiusPx, 0, Math.PI * 2);
     simCtx.fill();
-    // --- Active Planet Highlight Ring ---
+
     if (p === active) {
       simCtx.save();
-      simCtx.strokeStyle = "rgba(255,255,255,0.9)";  // strong white
-      simCtx.lineWidth = 1 * zoom;                   // scale with zoom
+      simCtx.strokeStyle = "rgba(255,255,255,0.9)";
+      simCtx.lineWidth = 1 * zoom;
       simCtx.beginPath();
       simCtx.arc(sx, sy, planetRadiusPx + 4, 0, Math.PI * 2);
       simCtx.stroke();
       simCtx.restore();
     }
-
   }
 }
 
 function animate() {
-    if (!isPaused) {
-        const speed = parseFloat(speedSlider.value) || 1;
-        const dt = BASE_DT * speed;
-        stepPhysics(dt);
+  if (!isPaused) {
+    const speed = parseFloat(speedSlider.value) || 1;
+    const dt = BASE_DT * speed;
+    stepPhysics(dt);
+    checkCollisions();
+    updateUIFromPlanet();
+  }
 
-        // Detect collisions but do not return early
-        checkCollisions();
-    }
-
-    // Always render the current state
-    renderScene();
-
-    requestAnimationFrame(animate);
+  renderScene();
+  requestAnimationFrame(animate);
 }
 
-
 /* ================================================================
-   Load Initial Planet and start animation
+   Start it up
 ================================================================ */
 
 loadPlanetIntoUI();
 animate();
-
 </script>
 
 </body>
