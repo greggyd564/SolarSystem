@@ -17,6 +17,12 @@ sf::Vector2f normalize(const sf::Vector2f& v) {
     return sf::Vector2f(v.x / len, v.y / len);
 }
 
+double get_speed(Object obj) {
+    float vx = (float)obj.getVelocity().x;
+    float vy = (float)obj.getVelocity().y;
+    return (double)std::sqrt(vx * vx + vy * vy);
+}
+
 double computeGForce(double m1, double m2, double r);
 double computeAcceleration(double F, double m);
 double distanceBetweenTwoObjects(double x1, double y1, double x2, double y2);
@@ -109,8 +115,8 @@ int main()
     posSlider.thumb.setOrigin({ 10.f, 10.f });
     posSlider.thumb.setFillColor(sf::Color(200, 200, 220));
 
-    velSlider.min = 0.1f;
-    velSlider.max = 10.0f;
+    velSlider.min = 0.001f;
+    velSlider.max = 1.0f;
     velSlider.value = 0.1f;
     velSlider.top = 260.f;
     velSlider.left = 16.f;
@@ -208,7 +214,7 @@ int main()
     // Copy of array of objects (Used for N-body system)
     std::vector<Object> nextBodies = bodies;
 
-    std::vector<double> planetVelKmPerSec(bodies.size(), 0.1);
+    //std::vector<double> planetVelKmPerSec(bodies.size(), 0.1);
     // should this be changed to bodies inside {} ? idk i tried and nothing was different lmk
     // Probably should be (bodies), but it doesn't matter because of frame rate
     std::vector<sf::CircleShape> graphicsBodies = convertBodies({sun, earth});
@@ -255,18 +261,19 @@ int main()
                         float t = (sliders[0].value - sliders[0].min) / (sliders[0].max - sliders[0].min);
                         float x = sliders[0].left + t * sliders[0].width;
                         sliders[0].thumb.setPosition({ x, sliders[0].top + 3.f });
-                        if (i < planetVelKmPerSec.size()) {
+                        /*if (i < planetVelKmPerSec.size()) {
                             velSlider.value = static_cast<float>(planetVelKmPerSec[i]);
                         } else {
                             velSlider.value = velSlider.min;
                         }
                         velAttributeKmPerSec = velSlider.value;
-
                         float tv = (velSlider.value - velSlider.min) / (velSlider.max - velSlider.min);
                         float xv = velSlider.left + tv * velSlider.width;
                         velSlider.thumb.setPosition({ xv, velSlider.top + 3.f });
 
-                        velLabel.setString("Velocity: " + std::to_string(velSlider.value) + " km/s");
+                        velLabel.setString("Velocity: " + std::to_string(velSlider.value) + " km/s");*/
+                        std::cout << get_speed(bodies[i]) << std::endl;
+
                     }
                 }
             }
@@ -284,14 +291,14 @@ int main()
                         nextBodies[targetedPlanetIdx].setLocation({ dir.x, dir.y });
                     }
                     else if (sliderBeingDragged == 2) {
-                        velAttributeKmPerSec = sliders[2].value;
+                        /*velAttributeKmPerSec = sliders[2].value;
 
                         if (targetedPlanetIdx < planetVelKmPerSec.size()) {
                             planetVelKmPerSec[targetedPlanetIdx] = velAttributeKmPerSec;
                         }
 
                         std::cout << "Velocity for planet " << targetedPlanetIdx
-                                  << " set to " << velAttributeKmPerSec << " km/s\n";
+                                  << " set to " << velAttributeKmPerSec << " km/s\n";*/
                     }
                 }
             }
@@ -311,6 +318,11 @@ int main()
             float x = sliders[1].left + t * sliders[1].width;
             sliders[1].thumb.setPosition({ x, sliders[1].top + 3.f });
             posLabel.setString("Distance From Sun: " + std::to_string(static_cast<int>(sliders[1].value)) + " AU");
+            sliders[2].value = std::clamp((float)get_speed(bodies[targetedPlanetIdx]), sliders[2].min, sliders[2].max);
+            t = (sliders[2].value - sliders[2].min) / (sliders[2].max - sliders[2].min);
+            x = sliders[2].left + t * sliders[2].width;
+            sliders[2].thumb.setPosition({ x, sliders[2].top + 3.f });
+            velLabel.setString("Speed: " + std::to_string(sliders[2].value));
         }
 
         window.clear();
