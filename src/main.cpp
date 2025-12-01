@@ -154,7 +154,7 @@ int main()
     window.setFramerateLimit(1000);
 
     // changed to 1000 from 20 idk why looks cool
-    cirQueue trails = cirQueue(1000);
+    cirQueue trails = cirQueue(10000);
 
     // First object - Sun
     double sMass = 1.0; // Mass
@@ -349,12 +349,12 @@ int main()
         }
 
         // changed to 100 looks cool idk
-        if (drawNum == 100) {
+        if (drawNum == 150) {
             drawNum = 0;
             for (int l = 0; l < bodies.size(); l++) {
                 graphicsBodies[l].setFillColor(sf::Color::White);
-                graphicsBodies[l].setRadius(5);
-                graphicsBodies[l].setOrigin({ 5, 5 });
+                graphicsBodies[l].setRadius(2);
+                graphicsBodies[l].setOrigin({ 2, 2 });
                 trails.push(graphicsBodies[l]);
             }
         }
