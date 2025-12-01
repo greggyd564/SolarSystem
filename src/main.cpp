@@ -87,7 +87,7 @@ int main()
     Slider sliders[3];
     Slider& massSlider = sliders[0];
     Slider& posSlider = sliders[1];
-    Slider& velSlider = sliders[2];   // NEW
+    Slider& velSlider = sliders[2];
 
     massSlider.min = 0.000001;
     massSlider.max = 0.000100;
@@ -224,14 +224,13 @@ int main()
                 window.close();
             }
 
-            // *** ADDED: toggle pause with P
-            if (event->is<sf::Event::KeyPressed>()) {                 // *** ADDED
-                const auto &kp = event->getIf<sf::Event::KeyPressed>(); // *** ADDED
-                if (kp->scancode == sf::Keyboard::Scan::P) {           // *** ADDED
-                    paused = !paused;                                 // *** ADDED
-                    std::cout << (paused? "PAUSED\n"                // *** ADDED
-                                        : "RESUMED\n");              // *** ADDED
-                }                                                     // *** ADDED
+            if (event->is<sf::Event::KeyPressed>()) {
+                const auto &kp = event->getIf<sf::Event::KeyPressed>();
+                if (kp->scancode == sf::Keyboard::Scan::P) {
+                    paused = !paused;
+                    std::cout << (paused? "PAUSED\n"
+                                        : "RESUMED\n");
+                }
             }
 
             if (event->is<sf::Event::MouseButtonPressed>()) {
@@ -341,11 +340,10 @@ int main()
 
         window.display();
 
-        // *** ADDED: if paused, skip physics update and go to next frame
-        if (paused) {                                // *** ADDED
-            graphicsBodies = convertBodies(bodies);  // *** ADDED (keep visuals in sync)
+        if (paused) {
+            graphicsBodies = convertBodies(bodies);  // (keep visuals in sync)
             drawNum = 0;
-            continue;                                // *** ADDED
+            continue;
         }
 
         // changed to 100 looks cool idk
