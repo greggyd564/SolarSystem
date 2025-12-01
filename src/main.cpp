@@ -134,13 +134,13 @@ int main()
         float x = sliders[sliderBeingDragged].left + t * sliders[sliderBeingDragged].width;
         sliders[sliderBeingDragged].thumb.setPosition({x, sliders[sliderBeingDragged].top + 3.f});
         if (sliderBeingDragged == 0) {
-            massLabel.setString("Mass: " + to_string(sliders[sliderBeingDragged].value * 100000) + " kg");
+            massLabel.setString("Mass: " + to_string(sliders[sliderBeingDragged].value * 100000000) + " kg");
         }
         else if (sliderBeingDragged == 1) {
             posLabel.setString("Distance From Sun: " + std::to_string(static_cast<int>(sliders[sliderBeingDragged].value)) + " AU");
         }
         else if (sliderBeingDragged == 2) {
-            velLabel.setString("Speed: " + std::to_string(sliders[2].value) + " km/s");
+            velLabel.setString("Speed: " + std::to_string(sliders[2].value * 10000).substr(0,6) + " km/s");
         }
     };
 
@@ -247,7 +247,7 @@ int main()
                     if (graphicsBodies[i].getGlobalBounds().contains(mousePos)){
                         targetedPlanetIdx = i;
                         massSlider.value = bodies[i].getMass();
-                        massLabel.setString("Mass: " + to_string(sliders[0].value * 100000) + " kg");
+                        massLabel.setString("Mass: " + to_string(sliders[0].value * 100000000) + " kg");
                         float t = (sliders[0].value - sliders[0].min) / (sliders[0].max - sliders[0].min);
                         float x = sliders[0].left + t * sliders[0].width;
                         sliders[0].thumb.setPosition({ x, sliders[0].top + 3.f });
@@ -299,7 +299,7 @@ int main()
             t = (sliders[2].value - sliders[2].min) / (sliders[2].max - sliders[2].min);
             x = sliders[2].left + t * sliders[2].width;
             sliders[2].thumb.setPosition({ x, sliders[2].top + 3.f });
-            velLabel.setString("Speed: " + std::to_string(sliders[2].value) + " km/h");
+            velLabel.setString("Speed: " + std::to_string(sliders[2].value * 10000).substr(0,6) + " km/h");
         }
 
         window.clear();
