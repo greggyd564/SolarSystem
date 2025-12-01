@@ -134,7 +134,7 @@ int main()
         float x = sliders[sliderBeingDragged].left + t * sliders[sliderBeingDragged].width;
         sliders[sliderBeingDragged].thumb.setPosition({x, sliders[sliderBeingDragged].top + 3.f});
         if (sliderBeingDragged == 0) {
-            massLabel.setString("Mass: " + to_string(sliders[sliderBeingDragged].value * 100000000) + " kg");
+            massLabel.setString("Mass: " + to_string(sliders[sliderBeingDragged].value * 100000000).substr(0,6) + " kg");
         }
         else if (sliderBeingDragged == 1) {
             posLabel.setString("Distance From Sun: " + std::to_string(static_cast<int>(sliders[sliderBeingDragged].value)) + " AU");
@@ -247,7 +247,7 @@ int main()
                     if (graphicsBodies[i].getGlobalBounds().contains(mousePos)){
                         targetedPlanetIdx = i;
                         massSlider.value = bodies[i].getMass();
-                        massLabel.setString("Mass: " + to_string(sliders[0].value * 100000000) + " kg");
+                        massLabel.setString("Mass: " + to_string(sliders[0].value * 100000000).substr(0,6) + " kg");
                         float t = (sliders[0].value - sliders[0].min) / (sliders[0].max - sliders[0].min);
                         float x = sliders[0].left + t * sliders[0].width;
                         sliders[0].thumb.setPosition({ x, sliders[0].top + 3.f });
